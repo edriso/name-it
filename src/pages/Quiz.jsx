@@ -326,7 +326,11 @@ export default function Quiz() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                onAnimationComplete={() => inputRef.current?.focus()}
+                onAnimationComplete={() => {
+                  // Don't auto-focus on touch devices — it opens the virtual keyboard
+                  const isCoarse = window.matchMedia('(pointer: coarse)').matches
+                  if (!isCoarse) inputRef.current?.focus()
+                }}
                 className={`rounded-2xl p-5 ring-1 ${
                   feedback === 'correct'
                     ? 'bg-success/10 ring-success/40'
