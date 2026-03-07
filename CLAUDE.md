@@ -36,7 +36,7 @@ src/
 - **Framer Motion** for page transitions and animations
 - **React Router v7** with `AnimatePresence` for animated route changes
 - **Vite 7** as build tool
-- **html2canvas** (lazy-loaded) for score screenshot download
+- **html2canvas-pro** (lazy-loaded) for score screenshot download (supports oklch colors)
 
 ## Coding Conventions
 
