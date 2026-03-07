@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo, useEffect, useCallback } from 'react'
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const TITLES = [
   { min: 100, title: 'Vocabulary Master', emoji: '🏆', color: 'text-[#c97b63]' },
@@ -23,6 +23,7 @@ export default function Score() {
   const navigate = useNavigate()
   const cardRef = useRef(null)
   const [downloading, setDownloading] = useState(false)
+  const [showInfo, setShowInfo] = useState(false)
 
   const particles = useMemo(
     () =>
@@ -243,6 +244,38 @@ export default function Score() {
           <p className="mt-4 text-center text-xs text-foreground/30">
             NameIt! — Vocabulary Quiz Game
           </p>
+        </div>
+
+        {/* Scoring info toggle */}
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => setShowInfo((v) => !v)}
+            className="cursor-pointer text-sm text-foreground/40 transition-colors hover:text-foreground/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground/20 rounded-md px-2 py-1"
+          >
+            &#9432; How scoring works
+          </button>
+          <AnimatePresence>
+            {showInfo && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="overflow-hidden"
+              >
+                <div className="mt-3 rounded-xl bg-card p-4 text-left text-sm ring-1 ring-border">
+                  <ul className="space-y-1.5 text-foreground/60">
+                    <li><span className="font-bold text-highlight">150 pts</span> — correct, no hints, under 5s</li>
+                    <li><span className="font-bold text-highlight">125 pts</span> — correct, no hints, under 10s</li>
+                    <li><span className="font-bold text-success">100 pts</span> — correct, no hints</li>
+                    <li><span className="font-bold text-success">75 pts</span> — correct, 1 hint used</li>
+                    <li><span className="font-bold text-success">40 pts</span> — correct, 2 hints used</li>
+                    <li><span className="font-bold text-foreground/30">0 pts</span> — 3 hints, wrong, or skipped</li>
+                  </ul>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Actions */}
