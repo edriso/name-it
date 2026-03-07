@@ -176,7 +176,7 @@ export default function Score() {
                 >
                   <div className="flex items-center gap-3">
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-surface-light text-xs font-bold">
-                      {i + 1}
+                      {r.number ?? i + 1}
                     </span>
                     <span className="text-sm font-medium text-gray-300">
                       {r.word}

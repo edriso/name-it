@@ -1,16 +1,25 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getTopic } from '../topics'
 import ZoomableImage from '../components/ZoomableImage'
 
-const QUESTION_TIME = 15
+const DEFAULT_TIME = 15
 
-function calculateScore(hintsUsed, timeLeft) {
+function shuffleArray(arr) {
+  const shuffled = arr.map((word, originalIndex) => ({ word, originalIndex }))
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
+function calculateScore(hintsUsed, timeLeft, questionTime) {
   if (hintsUsed >= 3) return 0
   if (hintsUsed === 2) return 40
   if (hintsUsed === 1) return 75
-  const elapsed = QUESTION_TIME - timeLeft
+  const elapsed = questionTime - timeLeft
   if (elapsed < 5) return 150
   if (elapsed < 10) return 125
   return 100
@@ -26,19 +35,31 @@ function getHintText(word, hintsUsed) {
 export default function Quiz() {
   const { slug } = useParams()
   const navigate = useNavigate()
+  const { state } = useLocation()
   const topic = getTopic(slug)
   const inputRef = useRef(null)
+
+  const questionTime = state?.timer ?? DEFAULT_TIME
+  const shouldShuffle = state?.shuffle ?? true
+
+  const questions = useMemo(() => {
+    if (!topic) return []
+    const items = topic.words.map((word, i) => ({ word, originalIndex: i }))
+    return shouldShuffle ? shuffleArray(topic.words) : items
+  }, [topic, shouldShuffle])
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answer, setAnswer] = useState('')
   const [hintsUsed, setHintsUsed] = useState(0)
-  const [timeLeft, setTimeLeft] = useState(QUESTION_TIME)
+  const [timeLeft, setTimeLeft] = useState(questionTime)
   const [feedback, setFeedback] = useState(null)
   const [results, setResults] = useState([])
   const [locked, setLocked] = useState(false)
 
-  const totalQuestions = topic?.words.length ?? 0
-  const currentWord = topic?.words[currentIndex] ?? ''
+  const totalQuestions = questions.length
+  const current = questions[currentIndex]
+  const currentWord = current?.word ?? ''
+  const currentNumber = current ? current.originalIndex + 1 : 0
 
   const advanceQuestion = useCallback(
     (result) => {
@@ -51,13 +72,13 @@ export default function Quiz() {
         setCurrentIndex((i) => i + 1)
         setAnswer('')
         setHintsUsed(0)
-        setTimeLeft(QUESTION_TIME)
+        setTimeLeft(questionTime)
         setFeedback(null)
         setLocked(false)
         setTimeout(() => inputRef.current?.focus(), 50)
       }
     },
-    [results, currentIndex, totalQuestions, navigate, slug, topic],
+    [results, currentIndex, totalQuestions, navigate, slug, topic, questionTime],
   )
 
   const handleSubmit = useCallback(
@@ -71,11 +92,12 @@ export default function Quiz() {
       setLocked(true)
       setFeedback(correct ? 'correct' : 'wrong')
 
-      const score = correct ? calculateScore(hintsUsed, timeLeft) : 0
+      const score = correct ? calculateScore(hintsUsed, timeLeft, questionTime) : 0
 
       setTimeout(() => {
         advanceQuestion({
           word: currentWord,
+          number: currentNumber,
           answer: trimmed,
           correct,
           hintsUsed,
@@ -84,7 +106,7 @@ export default function Quiz() {
         })
       }, 800)
     },
-    [answer, currentWord, hintsUsed, timeLeft, locked, advanceQuestion],
+    [answer, currentWord, currentNumber, hintsUsed, timeLeft, questionTime, locked, advanceQuestion],
   )
 
   useEffect(() => {
@@ -95,6 +117,7 @@ export default function Quiz() {
       setTimeout(() => {
         advanceQuestion({
           word: currentWord,
+          number: currentNumber,
           answer: '',
           correct: false,
           hintsUsed,
@@ -106,7 +129,7 @@ export default function Quiz() {
     }
     const id = setTimeout(() => setTimeLeft((t) => t - 1), 1000)
     return () => clearTimeout(id)
-  }, [timeLeft, locked, topic, currentWord, hintsUsed, advanceQuestion])
+  }, [timeLeft, locked, topic, currentWord, currentNumber, hintsUsed, advanceQuestion])
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -124,9 +147,9 @@ export default function Quiz() {
   }
 
   const hint = getHintText(currentWord, hintsUsed)
-  const timerPercent = (timeLeft / QUESTION_TIME) * 100
+  const timerPercent = (timeLeft / questionTime) * 100
   const timerColor =
-    timeLeft > 10 ? 'bg-success' : timeLeft > 5 ? 'bg-accent' : 'bg-danger'
+    timeLeft > questionTime * 0.66 ? 'bg-success' : timeLeft > questionTime * 0.33 ? 'bg-accent' : 'bg-danger'
 
   return (
     <motion.div
@@ -154,7 +177,7 @@ export default function Quiz() {
           </div>
           <h2 className="text-lg font-bold text-white">{topic.name}</h2>
           <span
-            className={`text-2xl font-extrabold tabular-nums ${timeLeft <= 5 ? 'text-danger' : 'text-white'}`}
+            className={`text-2xl font-extrabold tabular-nums ${timeLeft <= questionTime * 0.33 ? 'text-danger' : 'text-white'}`}
           >
             {timeLeft}s
           </span>
@@ -171,7 +194,7 @@ export default function Quiz() {
 
         {/* Progress dots */}
         <div className="mb-4 flex flex-wrap justify-center gap-1.5">
-          {topic.words.map((_, i) => {
+          {questions.map((_, i) => {
             let dotClass = 'bg-surface-light'
             if (i < results.length) {
               dotClass = results[i].correct ? 'bg-success' : 'bg-danger/60'
@@ -217,7 +240,7 @@ export default function Quiz() {
               >
                 <h3 className="mb-1 text-center text-2xl font-extrabold text-white sm:text-3xl">
                   What is number{' '}
-                  <span className="text-accent">{currentIndex + 1}</span>?
+                  <span className="text-accent">{currentNumber}</span>?
                 </h3>
 
                 {hint && (

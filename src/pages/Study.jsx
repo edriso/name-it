@@ -5,6 +5,7 @@ import { getTopic } from '../topics'
 import ZoomableImage from '../components/ZoomableImage'
 
 const STUDY_TIME = 30
+const TIMER_OPTIONS = [10, 15, 20, 30]
 
 export default function Study() {
   const { slug } = useParams()
@@ -12,10 +13,14 @@ export default function Study() {
   const topic = getTopic(slug)
   const [secondsLeft, setSecondsLeft] = useState(STUDY_TIME)
   const [started, setStarted] = useState(false)
+  const [timer, setTimer] = useState(15)
+  const [shuffle, setShuffle] = useState(true)
 
   const goToQuiz = useCallback(() => {
-    navigate(`/topics/${slug}/quiz`)
-  }, [navigate, slug])
+    navigate(`/topics/${slug}/quiz`, {
+      state: { timer, shuffle },
+    })
+  }, [navigate, slug, timer, shuffle])
 
   useEffect(() => {
     if (!started) return
@@ -112,6 +117,67 @@ export default function Study() {
           </div>
         </motion.div>
 
+        {/* Quiz settings */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="mt-4 rounded-2xl bg-surface-light/50 p-5 ring-1 ring-white/10 sm:p-6"
+        >
+          <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-gray-400">
+            Quiz Settings
+          </h3>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+            {/* Timer */}
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-gray-300">Timer</span>
+              <div className="flex gap-1.5">
+                {TIMER_OPTIONS.map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTimer(t)}
+                    className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
+                      timer === t
+                        ? 'bg-primary text-white shadow-md shadow-primary/30'
+                        : 'bg-surface/60 text-gray-400 hover:bg-surface hover:text-gray-200'
+                    }`}
+                  >
+                    {t}s
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Order */}
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-gray-300">Order</span>
+              <div className="flex gap-1.5">
+                <button
+                  onClick={() => setShuffle(true)}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
+                    shuffle
+                      ? 'bg-primary text-white shadow-md shadow-primary/30'
+                      : 'bg-surface/60 text-gray-400 hover:bg-surface hover:text-gray-200'
+                  }`}
+                >
+                  Random
+                </button>
+                <button
+                  onClick={() => setShuffle(false)}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
+                    !shuffle
+                      ? 'bg-primary text-white shadow-md shadow-primary/30'
+                      : 'bg-surface/60 text-gray-400 hover:bg-surface hover:text-gray-200'
+                  }`}
+                >
+                  In Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Actions */}
         <div className="mt-6 flex flex-col items-center gap-4">
           {!started ? (
             <div className="flex gap-3">
