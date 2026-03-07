@@ -17,6 +17,12 @@
   --color-highlight: #d4a362;
 }
 
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-foreground);
+  border-radius: 0.5rem;
+}
+
 body {
   font-family:
     system-ui,

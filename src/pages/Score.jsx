@@ -250,7 +250,7 @@ export default function Score() {
         <div className="mt-4 text-center">
           <button
             onClick={() => setShowInfo((v) => !v)}
-            className="cursor-pointer text-sm text-foreground/40 transition-colors hover:text-foreground/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground/20 rounded-md px-2 py-1"
+            className="cursor-pointer text-sm text-foreground/40 transition-colors hover:text-foreground/60 rounded-md px-2 py-1"
           >
             &#9432; How scoring works
           </button>
