@@ -45,6 +45,7 @@ export default function Quiz() {
     const all = topic.words.map((w, i) => ({
       display: w.display,
       accepts: w.accepts,
+      definition: w.definition,
       originalIndex: i,
     }))
     const sliced = wordCount < all.length ? all.slice(0, wordCount) : all
@@ -69,6 +70,8 @@ export default function Quiz() {
   const currentDisplay = current?.display ?? ''
   const currentAccepts = current?.accepts ?? EMPTY_ACCEPTS
   const currentNumber = current ? current.originalIndex + 1 : 0
+  const currentDefinition = current?.definition ?? ''
+  const isDefinition = topic?.type === 'definition'
 
   const advanceQuestion = useCallback(
     (result) => {
@@ -283,18 +286,24 @@ export default function Quiz() {
         </div>
 
         {/* Main content */}
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-          {/* Image */}
-          <div className="overflow-hidden rounded-2xl ring-1 ring-border lg:flex-1">
-            <ZoomableImage
-              src={topic.cover}
-              alt={topic.name}
-              className="h-[35vh] bg-black/10 lg:h-[55vh]"
-            />
-          </div>
+        <div
+          className={
+            isDefinition ? 'mx-auto max-w-lg' : 'flex flex-col gap-4 lg:flex-row lg:items-start'
+          }
+        >
+          {/* Image (image topics only) */}
+          {!isDefinition && (
+            <div className="overflow-hidden rounded-2xl ring-1 ring-border lg:flex-1">
+              <ZoomableImage
+                src={topic.cover}
+                alt={topic.name}
+                className="h-[35vh] bg-black/10 lg:h-[55vh]"
+              />
+            </div>
+          )}
 
           {/* Question area */}
-          <div className="lg:w-96 lg:flex-shrink-0">
+          <div className={isDefinition ? '' : 'lg:w-96 lg:flex-shrink-0'}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
@@ -310,9 +319,20 @@ export default function Quiz() {
                       : 'bg-card ring-border'
                 } transition-colors duration-300`}
               >
-                <h3 className="mb-1 text-center text-2xl font-extrabold text-foreground sm:text-3xl">
-                  What is number <span className="text-primary">{currentNumber}</span>?
-                </h3>
+                {isDefinition ? (
+                  <div className="mb-2">
+                    <p className="mb-2 text-center text-xs font-bold uppercase tracking-wider text-foreground/40">
+                      What word matches this definition?
+                    </p>
+                    <p className="text-center text-lg leading-relaxed text-foreground/80">
+                      &ldquo;{currentDefinition}&rdquo;
+                    </p>
+                  </div>
+                ) : (
+                  <h3 className="mb-1 text-center text-2xl font-extrabold text-foreground sm:text-3xl">
+                    What is number <span className="text-primary">{currentNumber}</span>?
+                  </h3>
+                )}
 
                 {hint && (
                   <p className="mb-3 text-center font-mono text-lg tracking-widest text-primary/80">

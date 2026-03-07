@@ -194,7 +194,7 @@ export default function Score() {
                 >
                   <div className="flex items-center gap-3">
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-bold text-foreground/70">
-                      {r.number ?? i + 1}
+                      {topic.type === 'definition' ? i + 1 : (r.number ?? i + 1)}
                     </span>
                     <span className="text-sm font-medium text-foreground/80">{r.word}</span>
                     {r.correct ? (

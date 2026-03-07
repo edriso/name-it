@@ -114,19 +114,25 @@ export default function Study() {
             >
               Study Time! 👀
             </motion.h1>
-            <p className="mt-2 text-foreground/50">Memorize the words — the quiz is coming!</p>
+            <p className="mt-2 text-foreground/50">
+              {topic.type === 'definition'
+                ? 'Read the definitions — the quiz is coming!'
+                : 'Memorize the words — the quiz is coming!'}
+            </p>
           </div>
         </div>
 
-        {/* Image */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="overflow-hidden rounded-2xl ring-1 ring-border"
-        >
-          <ZoomableImage src={topic.cover} alt={topic.name} className="h-[45vh] bg-muted" />
-        </motion.div>
+        {/* Image (image topics only) */}
+        {topic.type !== 'definition' && (
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="overflow-hidden rounded-2xl ring-1 ring-border"
+          >
+            <ZoomableImage src={topic.cover} alt={topic.name} className="h-[45vh] bg-muted" />
+          </motion.div>
+        )}
 
         {/* Word list */}
         <motion.div
@@ -135,23 +141,47 @@ export default function Study() {
           transition={{ delay: 0.15 }}
           className="mt-4 rounded-2xl bg-card p-5 ring-1 ring-border sm:p-6"
         >
-          <h2 className="mb-4 text-xl font-bold text-primary">{topic.name}</h2>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-            {topic.words.map((word, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 + Math.min(i, 12) * 0.04 }}
-                className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2"
-              >
-                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-                  {i + 1}
-                </span>
-                <span className="text-sm font-medium text-foreground/80">{word.display}</span>
-              </motion.div>
-            ))}
+          <div className="mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-primary">{topic.name}</h2>
+            {topic.type === 'definition' && (
+              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                Definitions
+              </span>
+            )}
           </div>
+          {topic.type === 'definition' ? (
+            <div className="space-y-2">
+              {topic.words.map((word, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 + Math.min(i, 12) * 0.04 }}
+                  className="rounded-lg bg-muted px-4 py-3"
+                >
+                  <span className="font-semibold text-foreground">{word.display}</span>
+                  <p className="mt-1 text-sm text-foreground/60">{word.definition}</p>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+              {topic.words.map((word, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 + Math.min(i, 12) * 0.04 }}
+                  className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2"
+                >
+                  <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <span className="text-sm font-medium text-foreground/80">{word.display}</span>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </motion.div>
 
         {/* Quiz settings */}

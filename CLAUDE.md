@@ -48,6 +48,8 @@ src/
 
 ## Adding a New Topic
 
+### Image Topic (numbered illustration)
+
 1. Create a folder in `src/assets/topics/your-topic/`
 2. Add `cover.jpeg` (illustrated image with numbered items)
 3. Add `index.js`:
@@ -67,4 +69,23 @@ export default {
 
 Words can be a string (single answer) or an array (multiple accepted answers).
 When using an array, the first element is the display name shown during study/hints.
+
+### Definition Topic (text-based, no image needed)
+
+1. Create a folder in `src/assets/topics/your-topic/`
+2. Add `index.js` with `type: 'definition'`:
+
+```js
+export default {
+  name: 'Your Topic Name',
+  type: 'definition',
+  words: [
+    { word: 'oven', definition: 'A hot box where you bake cakes and roast food' },
+    { word: ['frying pan', 'skillet'], definition: 'A flat pan used to cook food in oil' },
+  ],
+}
+```
+
+Each word entry is an object with `word` (string or array of accepted answers) and `definition` (shown as the quiz question). No cover image is required.
+
 The app auto-discovers topics — no other changes needed.

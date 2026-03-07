@@ -4,9 +4,9 @@ A fun, interactive vocabulary quiz game for young students, inspired by the Oxfo
 
 ## How It Works
 
-1. **Pick a Topic** — Choose from illustrated scenes (building site, kitchen, etc.)
-2. **Study** — See the image with all numbered items labeled. Memorize as many as you can!
-3. **Quiz** — The labels disappear. Type the correct word for each numbered item.
+1. **Pick a Topic** — Choose from illustrated scenes or definition-based vocabulary topics
+2. **Study** — See the image with numbered items, or read word definitions. Memorize as many as you can!
+3. **Quiz** — Type the correct word for each numbered item or definition clue.
 4. **Score** — See how you did, with points for speed and accuracy.
 
 ## Features
@@ -22,6 +22,8 @@ A fun, interactive vocabulary quiz game for young students, inspired by the Oxfo
 - **Animated Transitions** — Smooth page transitions and celebration effects
 
 ## Adding New Topics
+
+### Image Topic (numbered illustration)
 
 Create a folder in `src/assets/topics/` with two files:
 
@@ -50,6 +52,23 @@ export default {
 Words can be a string or an array. Arrays accept multiple correct answers — the first is the display name.
 
 **Image tips:** Crop out any word labels from the source image so only the numbered illustration remains. Use [iLoveIMG](https://www.iloveimg.com) to crop and compress. Keep images under ~300 KB for fast loading.
+
+### Definition Topic (text-based, no image needed)
+
+Create a folder with just `index.js` — no cover image required:
+
+```js
+export default {
+  name: 'Your Topic Name',
+  type: 'definition',
+  words: [
+    { word: 'oven', definition: 'A hot box where you bake cakes and roast food' },
+    { word: ['frying pan', 'skillet'], definition: 'A flat pan used to cook food in oil' },
+  ],
+}
+```
+
+Each word entry has `word` (string or array of accepted answers) and `definition` (shown as the quiz question).
 
 That's it — the app auto-discovers new topics. No other code changes needed.
 
