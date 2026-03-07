@@ -1,7 +1,6 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import html2canvas from 'html2canvas'
 
 const TITLES = [
   { min: 100, title: 'Vocabulary Master', emoji: '🏆', color: 'from-amber-400 to-yellow-500' },
@@ -25,21 +24,31 @@ export default function Score() {
   const cardRef = useRef(null)
   const [downloading, setDownloading] = useState(false)
 
+  const particles = useMemo(
+    () => Array.from({ length: 20 }, () => ({
+      x: 50 + (Math.random() - 0.5) * 20,
+      rotate: Math.random() > 0.5 ? 360 : -360,
+      duration: 2 + Math.random() * 2,
+      delay: Math.random() * 1.5,
+    })),
+    [],
+  )
+
   if (!state?.results) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <p className="text-2xl text-gray-400">No results found</p>
-          <Link to="/" className="mt-4 inline-block text-primary-light underline">Go home</Link>
+          <p className="text-2xl text-foreground/60">No results found</p>
+          <Link to="/" className="mt-4 inline-block text-primary underline">Go home</Link>
         </div>
       </div>
     )
   }
 
-  const { results, topic } = state
+  const { results, topic, settings } = state
   const totalScore = results.reduce((sum, r) => sum + r.score, 0)
   const maxScore = results.length * 150
-  const percent = Math.round((totalScore / maxScore) * 100)
+  const percent = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0
   const correctCount = results.filter((r) => r.correct).length
   const hintsTotal = results.reduce((sum, r) => sum + r.hintsUsed, 0)
   const bonusPoints = results.reduce((sum, r) => {
@@ -53,14 +62,17 @@ export default function Score() {
     if (!cardRef.current || downloading) return
     setDownloading(true)
     try {
+      const { default: html2canvas } = await import('html2canvas')
       const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: '#0a0a1a',
+        backgroundColor: '#1c1917',
         scale: 2,
       })
       const link = document.createElement('a')
       link.download = `nameit-${slug}-${totalScore}pts.png`
       link.href = canvas.toDataURL('image/png')
       link.click()
+    } catch {
+      // silently handle — canvas may fail on some deployments
     } finally {
       setDownloading(false)
     }
@@ -77,24 +89,13 @@ export default function Score() {
         {/* Celebration particles */}
         {isCelebration && (
           <div className="pointer-events-none fixed inset-0 overflow-hidden">
-            {Array.from({ length: 20 }).map((_, i) => (
+            {particles.map((p, i) => (
               <motion.div
                 key={i}
                 className="absolute text-2xl"
-                initial={{
-                  x: `${50 + (Math.random() - 0.5) * 20}vw`,
-                  y: '-10vh',
-                  rotate: 0,
-                }}
-                animate={{
-                  y: '110vh',
-                  rotate: 360 * (Math.random() > 0.5 ? 1 : -1),
-                }}
-                transition={{
-                  duration: 2 + Math.random() * 2,
-                  delay: Math.random() * 1.5,
-                  ease: 'easeIn',
-                }}
+                initial={{ x: `${p.x}vw`, y: '-10vh', rotate: 0 }}
+                animate={{ y: '110vh', rotate: p.rotate }}
+                transition={{ duration: p.duration, delay: p.delay, ease: 'easeIn' }}
               >
                 {['🎉', '⭐', '🎊', '✨', '🌟'][i % 5]}
               </motion.div>
@@ -103,7 +104,7 @@ export default function Score() {
         )}
 
         {/* Downloadable result card */}
-        <div ref={cardRef} className="rounded-3xl bg-gray-950 p-6 sm:p-8">
+        <div ref={cardRef} className="rounded-3xl bg-card-solid p-6 sm:p-8">
           {/* Title badge */}
           <motion.div
             initial={{ scale: 0, rotate: -10 }}
@@ -124,13 +125,11 @@ export default function Score() {
             transition={{ delay: 0.3 }}
             className="mb-6 text-center"
           >
-            <span className="bg-gradient-to-r from-accent to-accent-light bg-clip-text text-6xl font-black text-transparent sm:text-7xl">
+            <span className="bg-gradient-to-r from-amber-500 to-amber-400 bg-clip-text text-6xl font-black text-transparent sm:text-7xl">
               {totalScore}
             </span>
-            <span className="ml-2 text-xl text-gray-500">pts</span>
-            <p className="mt-1 text-sm text-gray-500">
-              {topic.name}
-            </p>
+            <span className="ml-2 text-xl text-foreground/40">pts</span>
+            <p className="mt-1 text-sm text-foreground/40">{topic.name}</p>
           </motion.div>
 
           {/* Stats grid */}
@@ -140,21 +139,17 @@ export default function Score() {
             transition={{ delay: 0.5 }}
             className="mb-6 grid grid-cols-3 gap-3"
           >
-            <div className="rounded-xl bg-surface-light/50 p-4 text-center ring-1 ring-white/10">
-              <div className="text-2xl font-extrabold text-success">
-                {correctCount}/{results.length}
-              </div>
-              <div className="mt-1 text-xs text-gray-400">Correct</div>
+            <div className="rounded-xl bg-muted p-4 text-center ring-1 ring-border">
+              <div className="text-2xl font-extrabold text-success">{correctCount}/{results.length}</div>
+              <div className="mt-1 text-xs text-foreground/50">Correct</div>
             </div>
-            <div className="rounded-xl bg-surface-light/50 p-4 text-center ring-1 ring-white/10">
-              <div className="text-2xl font-extrabold text-accent">{hintsTotal}</div>
-              <div className="mt-1 text-xs text-gray-400">Hints Used</div>
+            <div className="rounded-xl bg-muted p-4 text-center ring-1 ring-border">
+              <div className="text-2xl font-extrabold text-amber-500">{hintsTotal}</div>
+              <div className="mt-1 text-xs text-foreground/50">Hints Used</div>
             </div>
-            <div className="rounded-xl bg-surface-light/50 p-4 text-center ring-1 ring-white/10">
-              <div className="text-2xl font-extrabold text-primary-light">
-                +{bonusPoints}
-              </div>
-              <div className="mt-1 text-xs text-gray-400">Speed Bonus</div>
+            <div className="rounded-xl bg-muted p-4 text-center ring-1 ring-border">
+              <div className="text-2xl font-extrabold text-primary">+{bonusPoints}</div>
+              <div className="mt-1 text-xs text-foreground/50">Speed Bonus</div>
             </div>
           </motion.div>
 
@@ -163,24 +158,22 @@ export default function Score() {
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="rounded-2xl bg-surface-light/30 p-4 ring-1 ring-white/10"
+            className="rounded-2xl bg-muted p-4 ring-1 ring-border"
           >
-            <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-gray-400">
+            <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-foreground/50">
               Breakdown
             </h3>
             <div className="space-y-2">
               {results.map((r, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between rounded-lg bg-surface/40 px-3 py-2"
+                  className="flex items-center justify-between rounded-lg bg-card px-3 py-2"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-surface-light text-xs font-bold">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-bold text-foreground/70">
                       {r.number ?? i + 1}
                     </span>
-                    <span className="text-sm font-medium text-gray-300">
-                      {r.word}
-                    </span>
+                    <span className="text-sm font-medium text-foreground/80">{r.word}</span>
                     {r.correct ? (
                       <span className="text-xs text-success">✓</span>
                     ) : (
@@ -188,18 +181,17 @@ export default function Score() {
                     )}
                   </div>
                   <div className="flex items-center gap-2">
+                    {!r.correct && r.answer && (
+                      <span className="text-xs text-danger/70 line-through">{r.answer}</span>
+                    )}
                     {r.hintsUsed > 0 && (
-                      <span className="text-xs text-accent">
+                      <span className="text-xs text-amber-500">
                         {r.hintsUsed} hint{r.hintsUsed > 1 ? 's' : ''}
                       </span>
                     )}
                     <span
                       className={`min-w-[3rem] text-right text-sm font-bold ${
-                        r.score > 100
-                          ? 'text-accent'
-                          : r.score > 0
-                            ? 'text-success'
-                            : 'text-gray-500'
+                        r.score > 100 ? 'text-amber-500' : r.score > 0 ? 'text-success' : 'text-foreground/30'
                       }`}
                     >
                       {r.score} pts
@@ -210,13 +202,12 @@ export default function Score() {
             </div>
           </motion.div>
 
-          {/* Watermark for screenshot */}
-          <p className="mt-4 text-center text-xs text-gray-600">
+          <p className="mt-4 text-center text-xs text-foreground/30">
             NameIt! — Vocabulary Quiz Game
           </p>
         </div>
 
-        {/* Actions — outside the screenshot card */}
+        {/* Actions */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -226,25 +217,25 @@ export default function Score() {
           <button
             onClick={handleDownload}
             disabled={downloading}
-            className="rounded-xl bg-gradient-to-r from-accent to-accent-light px-6 py-3 font-bold text-gray-900 shadow-lg shadow-accent/20 transition-all hover:scale-105 disabled:opacity-50"
+            className="rounded-xl bg-amber-500 px-6 py-3 font-bold text-white shadow-lg shadow-amber-500/20 transition-all hover:brightness-110 disabled:opacity-50"
           >
             {downloading ? 'Saving...' : 'Save Result 📸'}
           </button>
           <button
-            onClick={() => navigate(`/topics/${slug}/quiz`)}
-            className="rounded-xl bg-gradient-to-r from-primary to-primary-dark px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105"
+            onClick={() => navigate(`/topics/${slug}/quiz`, { state: settings })}
+            className="rounded-xl bg-primary px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110"
           >
             Try Again 🔁
           </button>
           <button
             onClick={() => navigate(`/topics/${slug}`)}
-            className="rounded-xl bg-surface-light px-6 py-3 font-semibold text-gray-300 ring-1 ring-white/10 transition-all hover:bg-surface-light/80"
+            className="rounded-xl bg-card px-6 py-3 font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
           >
             Study Again 📖
           </button>
           <Link
             to="/"
-            className="rounded-xl bg-surface-light px-6 py-3 text-center font-semibold text-gray-300 ring-1 ring-white/10 transition-all hover:bg-surface-light/80"
+            className="rounded-xl bg-card px-6 py-3 text-center font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
           >
             New Topic 🏠
           </Link>

@@ -21,7 +21,7 @@ export default function NotFound() {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="mt-6 text-5xl font-extrabold text-white sm:text-6xl"
+        className="mt-6 text-5xl font-extrabold sm:text-6xl"
       >
         404
       </motion.h1>
@@ -29,7 +29,7 @@ export default function NotFound() {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="mt-3 text-lg text-gray-400"
+        className="mt-3 text-lg text-foreground/50"
       >
         This page doesn't exist — but you can still name things!
       </motion.p>
@@ -40,7 +40,7 @@ export default function NotFound() {
       >
         <Link
           to="/"
-          className="mt-8 inline-block rounded-xl bg-gradient-to-r from-primary to-primary-dark px-8 py-3 font-bold text-white shadow-lg shadow-primary/30 transition-all hover:scale-105"
+          className="mt-8 inline-block rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:brightness-110"
         >
           Back to Home
         </Link>

@@ -3,12 +3,12 @@ import { motion } from 'framer-motion'
 import { getTopics } from '../topics'
 
 const CARD_COLORS = [
-  'from-violet-600 to-indigo-700',
-  'from-amber-500 to-orange-600',
-  'from-emerald-500 to-teal-600',
-  'from-rose-500 to-pink-600',
-  'from-cyan-500 to-blue-600',
-  'from-fuchsia-500 to-purple-600',
+  'from-amber-600 to-amber-700',
+  'from-emerald-600 to-emerald-700',
+  'from-violet-600 to-violet-700',
+  'from-rose-600 to-rose-700',
+  'from-cyan-600 to-cyan-700',
+  'from-fuchsia-600 to-fuchsia-700',
 ]
 
 export default function Home() {
@@ -29,7 +29,7 @@ export default function Home() {
             transition={{ delay: 0.1 }}
             className="mb-3 text-5xl font-extrabold tracking-tight sm:text-7xl"
           >
-            <span className="bg-gradient-to-r from-primary-light via-accent to-accent-light bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-700 via-amber-500 to-amber-600 bg-clip-text text-transparent">
               NameIt!
             </span>
           </motion.h1>
@@ -37,7 +37,7 @@ export default function Home() {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-gray-400 sm:text-xl"
+            className="text-lg text-foreground/50 sm:text-xl"
           >
             How many can you name?
           </motion.p>
@@ -49,14 +49,13 @@ export default function Home() {
               key={topic.slug}
               initial={{ y: 40, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.15 + i * 0.08 }}
+              transition={{ delay: 0.15 + Math.min(i, 8) * 0.08 }}
             >
               <Link
                 to={`/topics/${topic.slug}`}
-                className="group relative block overflow-hidden rounded-2xl bg-gradient-to-br p-5 sm:p-6 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl"
-                style={{}}
+                className="group relative block overflow-hidden rounded-2xl p-5 sm:p-6 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${CARD_COLORS[i % CARD_COLORS.length]} opacity-80 transition-opacity group-hover:opacity-100`} />
+                <div className={`absolute inset-0 bg-gradient-to-br ${CARD_COLORS[i % CARD_COLORS.length]} opacity-90 transition-opacity group-hover:opacity-100`} />
                 <div className="relative z-10">
                   <h2 className="text-xl font-extrabold text-white sm:text-2xl">
                     {topic.name}
@@ -77,9 +76,9 @@ export default function Home() {
         </div>
 
         {topics.length === 0 && (
-          <div className="mt-20 text-center text-gray-500">
+          <div className="mt-20 text-center text-foreground/40">
             <p className="text-2xl">No topics yet!</p>
-            <p className="mt-2">Add a topic file to <code className="rounded bg-surface-light px-2 py-1 text-sm text-primary-light">src/assets/topics/</code></p>
+            <p className="mt-2">Add a topic file to <code className="rounded bg-muted px-2 py-1 text-sm text-primary">src/assets/topics/</code></p>
           </div>
         )}
       </div>
