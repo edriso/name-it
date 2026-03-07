@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #8b5cf6;
+  --color-primary-light: #a78bfa;
+  --color-primary-dark: #7c3aed;
+  --color-accent: #f59e0b;
+  --color-accent-light: #fbbf24;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-surface: #1e1b4b;
+  --color-surface-light: #312e81;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+  src: local('Inter');
+}
