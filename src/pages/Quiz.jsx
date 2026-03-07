@@ -5,6 +5,7 @@ import { getTopic } from '../topics'
 import ZoomableImage from '../components/ZoomableImage'
 
 const DEFAULT_TIME = 15
+const EMPTY_ACCEPTS = []
 const CORRECT_DELAY = 800
 const WRONG_DELAY = 1800
 
@@ -18,11 +19,11 @@ function calculateScore(hintsUsed, timeLeft, questionTime) {
   return 100
 }
 
-function getHintText(word, hintsUsed) {
+function getHintText(display, hintsUsed) {
   if (hintsUsed === 0) return null
-  if (hintsUsed >= 3) return word
-  const reveal = hintsUsed === 1 ? 1 : Math.ceil(word.length * 0.4)
-  return word.slice(0, reveal) + '_'.repeat(word.length - reveal)
+  if (hintsUsed >= 3) return display
+  const reveal = hintsUsed === 1 ? 1 : Math.ceil(display.length * 0.4)
+  return display.slice(0, reveal) + '_'.repeat(display.length - reveal)
 }
 
 export default function Quiz() {
@@ -41,7 +42,11 @@ export default function Quiz() {
   // useState lazy init — runs once, Math.random is fine here
   const [questions] = useState(() => {
     if (!topic) return []
-    const all = topic.words.map((word, i) => ({ word, originalIndex: i }))
+    const all = topic.words.map((w, i) => ({
+      display: w.display,
+      accepts: w.accepts,
+      originalIndex: i,
+    }))
     const sliced = wordCount < all.length ? all.slice(0, wordCount) : all
     if (!shouldShuffle) return sliced
     const shuffled = [...sliced]
@@ -61,7 +66,8 @@ export default function Quiz() {
 
   const totalQuestions = questions.length
   const current = questions[currentIndex]
-  const currentWord = current?.word ?? ''
+  const currentDisplay = current?.display ?? ''
+  const currentAccepts = current?.accepts ?? EMPTY_ACCEPTS
   const currentNumber = current ? current.originalIndex + 1 : 0
 
   const advanceQuestion = useCallback(
@@ -95,7 +101,7 @@ export default function Quiz() {
     (submittedAnswer) => {
       if (locked) return
       const trimmed = (submittedAnswer ?? '').trim().toLowerCase()
-      const correct = trimmed === currentWord.toLowerCase()
+      const correct = currentAccepts.includes(trimmed)
 
       setLocked(true)
       setFeedback(correct ? 'correct' : 'wrong')
@@ -105,7 +111,7 @@ export default function Quiz() {
 
       setTimeout(() => {
         advanceQuestion({
-          word: currentWord,
+          word: currentDisplay,
           number: currentNumber,
           answer: trimmed,
           correct,
@@ -115,7 +121,16 @@ export default function Quiz() {
         })
       }, delay)
     },
-    [currentWord, currentNumber, hintsUsed, timeLeft, questionTime, locked, advanceQuestion],
+    [
+      currentDisplay,
+      currentAccepts,
+      currentNumber,
+      hintsUsed,
+      timeLeft,
+      questionTime,
+      locked,
+      advanceQuestion,
+    ],
   )
 
   function handleSubmit(e) {
@@ -130,7 +145,7 @@ export default function Quiz() {
     setFeedback('wrong')
     setTimeout(() => {
       advanceQuestion({
-        word: currentWord,
+        word: currentDisplay,
         number: currentNumber,
         answer: '',
         correct: false,
@@ -139,7 +154,7 @@ export default function Quiz() {
         score: 0,
       })
     }, WRONG_DELAY)
-  }, [locked, currentWord, currentNumber, hintsUsed, timeLeft, advanceQuestion])
+  }, [locked, currentDisplay, currentNumber, hintsUsed, timeLeft, advanceQuestion])
 
   // Timer countdown
   useEffect(() => {
@@ -150,7 +165,7 @@ export default function Quiz() {
         setFeedback('wrong')
         setTimeout(() => {
           advanceQuestion({
-            word: currentWord,
+            word: currentDisplay,
             number: currentNumber,
             answer: '',
             correct: false,
@@ -164,7 +179,7 @@ export default function Quiz() {
     }
     const id = setTimeout(() => setTimeLeft((t) => t - 1), 1000)
     return () => clearTimeout(id)
-  }, [timeLeft, locked, topic, currentWord, currentNumber, hintsUsed, advanceQuestion])
+  }, [timeLeft, locked, topic, currentDisplay, currentNumber, hintsUsed, advanceQuestion])
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -197,7 +212,7 @@ export default function Quiz() {
     )
   }
 
-  const hint = getHintText(currentWord, hintsUsed)
+  const hint = getHintText(currentDisplay, hintsUsed)
   const timerPercent = (timeLeft / questionTime) * 100
   const timerColor =
     timeLeft > questionTime * 0.66
@@ -367,7 +382,7 @@ export default function Quiz() {
                       animate={{ scale: 1 }}
                       className="text-base font-bold text-danger"
                     >
-                      It was: {currentWord} ❌
+                      It was: {currentDisplay} ❌
                     </motion.span>
                   )}
                 </div>

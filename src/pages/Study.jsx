@@ -144,7 +144,7 @@ export default function Study() {
                 <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
                   {i + 1}
                 </span>
-                <span className="text-sm font-medium text-foreground/80">{word}</span>
+                <span className="text-sm font-medium text-foreground/80">{word.display}</span>
               </motion.div>
             ))}
           </div>

@@ -58,8 +58,13 @@ import cover from './cover.jpeg'
 export default {
   name: 'Your Topic Name',
   cover,
-  words: ['word1', 'word2', 'word3'],
+  words: [
+    'simple word', // single accepted answer
+    ['primary-name', 'alt1', 'alt2'], // multiple accepted answers
+  ],
 }
 ```
 
-The app auto-discovers it — no other changes needed.
+Words can be a string (single answer) or an array (multiple accepted answers).
+When using an array, the first element is the display name shown during study/hints.
+The app auto-discovers topics — no other changes needed.

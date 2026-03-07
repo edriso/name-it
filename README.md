@@ -13,6 +13,7 @@ A fun, interactive vocabulary quiz game for young students, inspired by the Oxfo
 
 - **Word Count Selector** — Choose how many words to quiz (8, 12, 16, or all)
 - **Quiz Settings** — Customizable timer (10s–30s) and random/in-order mode
+- **Multi-Answer Support** — Words with alternative names (e.g., "cement-mixer" / "concrete mixer") all count as correct
 - **Hint System** — Up to 3 hints per question, with progressive letter reveals
 - **Score Titles** — Earn titles from "Word Rookie" to "Vocabulary Master" based on performance
 - **Screenshot Download** — Save your score card as a PNG image
@@ -40,12 +41,13 @@ export default {
   name: 'Your Topic Name',
   cover,
   words: [
-    'word1', // 1
-    'word2', // 2
-    'word3', // 3
+    'simple word', // single answer
+    ['pick-axe', 'pickaxe', 'pick axe'], // multiple accepted answers
   ],
 }
 ```
+
+Words can be a string or an array. Arrays accept multiple correct answers — the first is the display name.
 
 That's it — the app auto-discovers new topics. No other code changes needed.
 

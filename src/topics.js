@@ -1,5 +1,12 @@
 const topicModules = import.meta.glob('./assets/topics/*/index.js', { eager: true })
 
+function normalizeWord(entry) {
+  if (Array.isArray(entry)) {
+    return { display: entry[0], accepts: entry.map((w) => w.toLowerCase()) }
+  }
+  return { display: entry, accepts: [entry.toLowerCase()] }
+}
+
 const topics = Object.entries(topicModules).map(([path, mod]) => {
   const slug = path.split('/').at(-2)
   const topic = mod.default
@@ -7,7 +14,7 @@ const topics = Object.entries(topicModules).map(([path, mod]) => {
     slug,
     name: topic.name,
     cover: topic.cover,
-    words: topic.words,
+    words: topic.words.map(normalizeWord),
   }
 })
 
