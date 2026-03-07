@@ -49,6 +49,8 @@ export default {
 
 Words can be a string or an array. Arrays accept multiple correct answers — the first is the display name.
 
+**Image tips:** Crop out any word labels from the source image so only the numbered illustration remains. Use [iLoveIMG](https://www.iloveimg.com) to crop and compress. Keep images under ~300 KB for fast loading.
+
 That's it — the app auto-discovers new topics. No other code changes needed.
 
 ## Tech Stack
