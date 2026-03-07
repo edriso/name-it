@@ -83,7 +83,7 @@ export default function Score() {
     try {
       const { default: html2canvas } = await import('html2canvas')
       const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: '#1c1917',
+        backgroundColor: '#f4f1de',
         scale: 2,
       })
       const link = document.createElement('a')
@@ -91,7 +91,7 @@ export default function Score() {
       link.href = canvas.toDataURL('image/png')
       link.click()
     } catch {
-      // silently handle — canvas may fail on some deployments
+      alert('Could not save the image. Try a different browser.')
     } finally {
       setDownloading(false)
     }
@@ -235,7 +235,7 @@ export default function Score() {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center"
+          className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center"
         >
           <button
             onClick={handleDownload}
@@ -243,7 +243,12 @@ export default function Score() {
             aria-label="Save result as image"
             className="cursor-pointer rounded-xl bg-highlight px-6 py-3 font-bold text-white shadow-lg shadow-highlight/20 transition-all hover:brightness-110 disabled:opacity-50"
           >
-            {downloading ? 'Saving...' : 'Save Result'}
+            <span className="inline-flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+                <path fillRule="evenodd" d="M1 8a2 2 0 0 1 2-2h.93a2 2 0 0 0 1.664-.89l.812-1.22A2 2 0 0 1 8.07 3h3.86a2 2 0 0 1 1.664.89l.812 1.22A2 2 0 0 0 16.07 6H17a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8Zm13.5 3a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM10 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
+              </svg>
+              {downloading ? 'Saving...' : 'Save Result'}
+            </span>
           </button>
           <div className="flex flex-col items-center gap-1">
             <button
@@ -254,15 +259,9 @@ export default function Score() {
             </button>
             <span className="text-[10px] text-foreground/30">Press R or Enter</span>
           </div>
-          <button
-            onClick={() => navigate(`/topics/${type}/${slug}`)}
-            className="cursor-pointer rounded-xl bg-card px-6 py-3 font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
-          >
-            Study Again
-          </button>
           <Link
             to="/"
-            className="rounded-xl bg-card px-6 py-3 text-center font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
+            className="inline-flex items-center justify-center rounded-xl bg-card px-6 py-3 font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
           >
             New Topic
           </Link>
