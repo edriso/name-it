@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Study from './pages/Study'
 import Quiz from './pages/Quiz'
 import Score from './pages/Score'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
             <Route path="/topics/:slug" element={<Study />} />
             <Route path="/topics/:slug/quiz" element={<Quiz />} />
             <Route path="/topics/:slug/score" element={<Score />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
       </div>
