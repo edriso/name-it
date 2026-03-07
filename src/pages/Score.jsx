@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useState, useMemo, useEffect, useCallback } from 'react'
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
@@ -35,6 +35,22 @@ export default function Score() {
     [],
   )
 
+  const handleTryAgain = useCallback(() => {
+    if (state?.settings) navigate(`/topics/${slug}/quiz`, { state: state.settings })
+  }, [navigate, slug, state])
+
+  // Keyboard shortcuts: R or Enter to try again
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return
+      if (e.key === 'r' || e.key === 'R' || e.key === 'Enter') {
+        handleTryAgain()
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [handleTryAgain])
+
   if (!state?.results) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -48,7 +64,7 @@ export default function Score() {
     )
   }
 
-  const { results, topic, settings } = state
+  const { results, topic } = state
   const totalScore = results.reduce((sum, r) => sum + r.score, 0)
   const maxScore = results.length * 150
   const percent = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0
@@ -232,12 +248,15 @@ export default function Score() {
           >
             {downloading ? 'Saving...' : 'Save Result 📸'}
           </button>
-          <button
-            onClick={() => navigate(`/topics/${slug}/quiz`, { state: settings })}
-            className="rounded-xl bg-primary px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110"
-          >
-            Try Again 🔁
-          </button>
+          <div className="flex flex-col items-center gap-1">
+            <button
+              onClick={handleTryAgain}
+              className="cursor-pointer rounded-xl bg-primary px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110"
+            >
+              Try Again 🔁
+            </button>
+            <span className="text-[10px] text-foreground/30">Press R or Enter</span>
+          </div>
           <button
             onClick={() => navigate(`/topics/${slug}`)}
             className="rounded-xl bg-card px-6 py-3 font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"

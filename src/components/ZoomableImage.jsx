@@ -42,23 +42,25 @@ function ImageViewer({ src, alt, onClose }) {
 
   // Clamp translate when scale changes
   useEffect(() => {
-    if (scale <= 1) {
-      setTranslate({ x: 0, y: 0 })
-    } else {
-      setTranslate((t) => {
-        const img = imgRef.current
-        if (!img) return t
-        const rect = img.getBoundingClientRect()
-        const imgW = rect.width / scale
-        const imgH = rect.height / scale
-        const maxX = (imgW * (scale - 1)) / 2
-        const maxY = (imgH * (scale - 1)) / 2
-        return {
-          x: Math.max(-maxX, Math.min(maxX, t.x)),
-          y: Math.max(-maxY, Math.min(maxY, t.y)),
-        }
-      })
-    }
+    queueMicrotask(() => {
+      if (scale <= 1) {
+        setTranslate({ x: 0, y: 0 })
+      } else {
+        setTranslate((t) => {
+          const img = imgRef.current
+          if (!img) return t
+          const rect = img.getBoundingClientRect()
+          const imgW = rect.width / scale
+          const imgH = rect.height / scale
+          const maxX = (imgW * (scale - 1)) / 2
+          const maxY = (imgH * (scale - 1)) / 2
+          return {
+            x: Math.max(-maxX, Math.min(maxX, t.x)),
+            y: Math.max(-maxY, Math.min(maxY, t.y)),
+          }
+        })
+      }
+    })
   }, [scale])
 
   function clamp(x, y) {

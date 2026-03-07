@@ -37,6 +37,19 @@ export default function Study() {
     })
   }, [navigate, slug, timer, shuffle, wordCount])
 
+  // Keyboard shortcut: Enter or Space to go to quiz
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        goToQuiz()
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [goToQuiz])
+
   useEffect(() => {
     if (!started) return
     if (secondsLeft <= 0) {
@@ -222,19 +235,22 @@ export default function Study() {
         {/* Actions */}
         <div className="mt-6 flex flex-col items-center gap-4">
           {!started ? (
-            <div className="flex gap-3">
-              <button
-                onClick={() => setStarted(true)}
-                className="cursor-pointer rounded-xl bg-card px-6 py-3 font-semibold text-foreground/60 ring-1 ring-border transition-all hover:bg-card-hover"
-              >
-                Start Timer ({STUDY_TIME}s)
-              </button>
-              <button
-                onClick={goToQuiz}
-                className="cursor-pointer rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:brightness-110"
-              >
-                I'm Ready! 🚀
-              </button>
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setStarted(true)}
+                  className="cursor-pointer rounded-xl bg-card px-6 py-3 font-semibold text-foreground/60 ring-1 ring-border transition-all hover:bg-card-hover"
+                >
+                  Start Timer ({STUDY_TIME}s)
+                </button>
+                <button
+                  onClick={goToQuiz}
+                  className="cursor-pointer rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:brightness-110"
+                >
+                  I'm Ready! 🚀
+                </button>
+              </div>
+              <span className="text-[10px] text-foreground/30">Press Enter to start quiz</span>
             </div>
           ) : (
             <>

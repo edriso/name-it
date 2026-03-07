@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getTopic } from '../topics'
@@ -32,12 +32,14 @@ export default function Quiz() {
   const topic = getTopic(slug)
   const inputRef = useRef(null)
   const resultsRef = useRef([])
+  const [completedResults, setCompletedResults] = useState([])
 
   const questionTime = state?.timer ?? DEFAULT_TIME
   const shouldShuffle = state?.shuffle ?? true
   const wordCount = state?.wordCount ?? topic?.words.length ?? 0
 
-  const questions = useMemo(() => {
+  // useState lazy init — runs once, Math.random is fine here
+  const [questions] = useState(() => {
     if (!topic) return []
     const all = topic.words.map((word, i) => ({ word, originalIndex: i }))
     const sliced = wordCount < all.length ? all.slice(0, wordCount) : all
@@ -48,7 +50,7 @@ export default function Quiz() {
       ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
     }
     return shuffled
-  }, [topic, shouldShuffle, wordCount])
+  })
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answer, setAnswer] = useState('')
@@ -66,6 +68,7 @@ export default function Quiz() {
     (result) => {
       const newResults = [...resultsRef.current, result]
       resultsRef.current = newResults
+      setCompletedResults(newResults)
 
       if (currentIndex + 1 >= totalQuestions) {
         navigate(`/topics/${slug}/score`, {
@@ -85,7 +88,7 @@ export default function Quiz() {
         setTimeout(() => inputRef.current?.focus(), 50)
       }
     },
-    [currentIndex, totalQuestions, navigate, slug, topic, questionTime, shouldShuffle],
+    [currentIndex, totalQuestions, navigate, slug, topic, questionTime, shouldShuffle, wordCount],
   )
 
   const submitAnswer = useCallback(
@@ -121,7 +124,7 @@ export default function Quiz() {
     submitAnswer(answer)
   }
 
-  function handleSkip() {
+  const handleSkip = useCallback(() => {
     if (locked) return
     setLocked(true)
     setFeedback('wrong')
@@ -136,30 +139,46 @@ export default function Quiz() {
         score: 0,
       })
     }, WRONG_DELAY)
-  }
+  }, [locked, currentWord, currentNumber, hintsUsed, timeLeft, advanceQuestion])
 
   // Timer countdown
   useEffect(() => {
     if (locked || !topic) return
     if (timeLeft <= 0) {
-      setLocked(true)
-      setFeedback('wrong')
-      setTimeout(() => {
-        advanceQuestion({
-          word: currentWord,
-          number: currentNumber,
-          answer: '',
-          correct: false,
-          hintsUsed,
-          timeLeft: 0,
-          score: 0,
-        })
-      }, WRONG_DELAY)
+      queueMicrotask(() => {
+        setLocked(true)
+        setFeedback('wrong')
+        setTimeout(() => {
+          advanceQuestion({
+            word: currentWord,
+            number: currentNumber,
+            answer: '',
+            correct: false,
+            hintsUsed,
+            timeLeft: 0,
+            score: 0,
+          })
+        }, WRONG_DELAY)
+      })
       return
     }
     const id = setTimeout(() => setTimeLeft((t) => t - 1), 1000)
     return () => clearTimeout(id)
   }, [timeLeft, locked, topic, currentWord, currentNumber, hintsUsed, advanceQuestion])
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.target.tagName === 'INPUT') return
+      if (e.key === 'h' || e.key === 'H') {
+        if (!locked && hintsUsed < 3) setHintsUsed((h) => Math.min(h + 1, 3))
+      } else if (e.key === 's' || e.key === 'S') {
+        handleSkip()
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [locked, hintsUsed, handleSkip])
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -241,8 +260,8 @@ export default function Quiz() {
         <div className="mb-4 flex flex-wrap justify-center gap-1.5">
           {questions.map((_, i) => {
             let dotClass = 'bg-muted'
-            if (i < resultsRef.current.length) {
-              dotClass = resultsRef.current[i].correct ? 'bg-success' : 'bg-danger/60'
+            if (i < completedResults.length) {
+              dotClass = completedResults[i].correct ? 'bg-success' : 'bg-danger/60'
             } else if (i === currentIndex) {
               dotClass = 'bg-primary ring-2 ring-primary/50'
             }
@@ -311,21 +330,24 @@ export default function Quiz() {
                 </form>
 
                 <div className="mt-3 flex items-center justify-between">
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setHintsUsed((h) => Math.min(h + 1, 3))}
-                      disabled={locked || hintsUsed >= 3}
-                      className="rounded-lg bg-amber-500/20 px-3 py-2 text-sm font-semibold text-amber-600 transition-all hover:bg-amber-500/30 disabled:opacity-30 dark:text-amber-400"
-                    >
-                      {hintsUsed >= 3 ? 'Revealed' : `Hint 💡`}
-                    </button>
-                    <button
-                      onClick={handleSkip}
-                      disabled={locked}
-                      className="rounded-lg bg-muted px-3 py-2 text-sm font-semibold text-foreground/50 transition-all hover:bg-muted/80 hover:text-foreground/70 disabled:opacity-30"
-                    >
-                      Skip
-                    </button>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setHintsUsed((h) => Math.min(h + 1, 3))}
+                        disabled={locked || hintsUsed >= 3}
+                        className="cursor-pointer rounded-lg bg-amber-500/20 px-3 py-2 text-sm font-semibold text-amber-600 transition-all hover:bg-amber-500/30 disabled:opacity-30 dark:text-amber-400"
+                      >
+                        {hintsUsed >= 3 ? 'Revealed' : `Hint 💡`}
+                      </button>
+                      <button
+                        onClick={handleSkip}
+                        disabled={locked}
+                        className="cursor-pointer rounded-lg bg-muted px-3 py-2 text-sm font-semibold text-foreground/50 transition-all hover:bg-muted/80 hover:text-foreground/70 disabled:opacity-30"
+                      >
+                        Skip
+                      </button>
+                    </div>
+                    <span className="text-[10px] text-foreground/30">H = hint, S = skip</span>
                   </div>
 
                   {feedback === 'correct' && (
