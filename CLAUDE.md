@@ -45,6 +45,22 @@ src/
 - Theme colors via CSS custom properties: `bg-background`, `text-foreground`, `bg-card`, `bg-primary`, etc.
 - Pages use `motion.div` with `initial/animate/exit` opacity transitions
 - State passed between pages via `useNavigate` + `useLocation` state
+- Keep button/heading text simple and clear — no cliche emojis (rockets, sparkles, etc.)
+- Personality emojis in dynamic UI are fine (e.g. quiz countdown faces, score title badges)
+
+## URL Structure
+
+Routes use `/topics/:type/:slug` where `type` is `image` or `definition`:
+
+```
+/                                  # Home — topic grid
+/topics/image/building-site        # Study — image topic
+/topics/definition/kitchen         # Study — definition topic
+/topics/:type/:slug/quiz           # Quiz
+/topics/:type/:slug/score          # Score
+```
+
+This allows same-name topics across quiz types without URL conflicts.
 
 ## Adding a New Topic
 
