@@ -94,7 +94,7 @@ export default function Quiz() {
         setTimeLeft(questionTime)
         setFeedback(null)
         setLocked(false)
-        setTimeout(() => inputRef.current?.focus(), 50)
+        // input is focused via onAnimationComplete on the motion.div
       }
     },
     [
@@ -197,20 +197,25 @@ export default function Quiz() {
   // Keyboard shortcuts
   useEffect(() => {
     function handleKey(e) {
-      if (e.target.tagName === 'INPUT') return
-      if (e.key === 'h' || e.key === 'H') {
+      const inInput = e.target.tagName === 'INPUT'
+      if (e.key === '?') {
+        e.preventDefault()
         if (!locked && hintsUsed < 3) setHintsUsed((h) => Math.min(h + 1, 3))
-      } else if (e.key === 's' || e.key === 'S') {
+      } else if (e.key === 'Escape') {
         handleSkip()
+      } else if (!inInput) {
+        if (e.key === 'h' || e.key === 'H') {
+          if (!locked && hintsUsed < 3) setHintsUsed((h) => Math.min(h + 1, 3))
+        } else if (e.key === 's' || e.key === 'S') {
+          handleSkip()
+        }
       }
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
   }, [locked, hintsUsed, handleSkip])
 
-  useEffect(() => {
-    inputRef.current?.focus()
-  }, [currentIndex])
+  // initial focus handled by onAnimationComplete on the question motion.div
 
   if (!topic) {
     return (
@@ -321,6 +326,7 @@ export default function Quiz() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
                 transition={{ duration: 0.2 }}
+                onAnimationComplete={() => inputRef.current?.focus()}
                 className={`rounded-2xl p-5 ring-1 ${
                   feedback === 'correct'
                     ? 'bg-success/10 ring-success/40'
@@ -389,7 +395,7 @@ export default function Quiz() {
                         Skip
                       </button>
                     </div>
-                    <span className="text-[10px] text-foreground/30">H = hint, S = skip</span>
+                    <span className="hidden text-[10px] text-foreground/30 sm:inline">? = hint, Esc = skip</span>
                   </div>
 
                   {feedback === 'correct' && (
