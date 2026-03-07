@@ -15,7 +15,7 @@ export default function NotFound() {
         transition={{ type: 'spring', stiffness: 200 }}
         className="text-8xl"
       >
-        🤷
+        🔍
       </motion.span>
       <motion.h1
         initial={{ y: 20, opacity: 0 }}
