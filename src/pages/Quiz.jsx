@@ -194,7 +194,7 @@ export default function Quiz() {
             <ZoomableImage
               src={topic.cover}
               alt={topic.name}
-              className="max-h-[40vh] bg-black/30 lg:max-h-[60vh]"
+              className="h-[35vh] bg-black/30 lg:h-[55vh]"
             />
           </div>
 

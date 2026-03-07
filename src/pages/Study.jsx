@@ -72,36 +72,43 @@ export default function Study() {
           </div>
         </div>
 
+        {/* Image */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="relative overflow-hidden rounded-2xl bg-surface-light/50 ring-1 ring-white/10"
+          className="overflow-hidden rounded-2xl ring-1 ring-white/10"
         >
           <ZoomableImage
             src={topic.cover}
             alt={topic.name}
-            className="max-h-[50vh] bg-black/30"
+            className="h-[45vh] bg-black/30"
           />
+        </motion.div>
 
-          <div className="p-5 sm:p-6">
-            <h2 className="mb-4 text-xl font-bold text-primary-light">{topic.name}</h2>
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-              {topic.words.map((word, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + i * 0.04 }}
-                  className="flex items-center gap-2 rounded-lg bg-surface/60 px-3 py-2"
-                >
-                  <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-                    {i + 1}
-                  </span>
-                  <span className="text-sm font-medium text-gray-200">{word}</span>
-                </motion.div>
-              ))}
-            </div>
+        {/* Word list */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.15 }}
+          className="mt-4 rounded-2xl bg-surface-light/50 p-5 ring-1 ring-white/10 sm:p-6"
+        >
+          <h2 className="mb-4 text-xl font-bold text-primary-light">{topic.name}</h2>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+            {topic.words.map((word, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 + i * 0.04 }}
+                className="flex items-center gap-2 rounded-lg bg-surface/60 px-3 py-2"
+              >
+                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                  {i + 1}
+                </span>
+                <span className="text-sm font-medium text-gray-200">{word}</span>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
 
