@@ -16,18 +16,11 @@ const CARD_COLORS = [
   'from-indigo-600 to-indigo-700',
 ]
 
-function hashSlug(slug) {
-  let h = 0
-  for (let i = 0; i < slug.length; i++) {
-    h = ((h << 5) - h + slug.charCodeAt(i)) | 0
-  }
-  return Math.abs(h)
-}
-
-// Pre-compute stable color map for all topics
+// Shuffle colors once per page load so each visit feels fresh
 const allTopics = getTopics()
+const shuffledColors = [...CARD_COLORS].sort(() => Math.random() - 0.5)
 const topicColorMap = Object.fromEntries(
-  allTopics.map((t) => [t.slug, CARD_COLORS[hashSlug(t.slug) % CARD_COLORS.length]]),
+  allTopics.map((t, i) => [t.slug, shuffledColors[i % shuffledColors.length]]),
 )
 
 const FILTERS = [
