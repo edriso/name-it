@@ -18,7 +18,7 @@ function getTitle(percent) {
 }
 
 export default function Score() {
-  const { slug } = useParams()
+  const { type, slug } = useParams()
   const { state } = useLocation()
   const navigate = useNavigate()
   const cardRef = useRef(null)
@@ -36,8 +36,8 @@ export default function Score() {
   )
 
   const handleTryAgain = useCallback(() => {
-    if (state?.settings) navigate(`/topics/${slug}/quiz`, { state: state.settings })
-  }, [navigate, slug, state])
+    if (state?.settings) navigate(`/topics/${type}/${slug}/quiz`, { state: state.settings })
+  }, [navigate, type, slug, state])
 
   // Keyboard shortcuts: R or Enter to try again
   useEffect(() => {
@@ -255,7 +255,7 @@ export default function Score() {
             <span className="text-[10px] text-foreground/30">Press R or Enter</span>
           </div>
           <button
-            onClick={() => navigate(`/topics/${slug}`)}
+            onClick={() => navigate(`/topics/${type}/${slug}`)}
             className="cursor-pointer rounded-xl bg-card px-6 py-3 font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
           >
             Study Again 📖

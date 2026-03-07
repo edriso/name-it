@@ -14,9 +14,9 @@ export default function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
-          <Route path="/topics/:slug" element={<Study />} />
-          <Route path="/topics/:slug/quiz" element={<Quiz />} />
-          <Route path="/topics/:slug/score" element={<Score />} />
+          <Route path="/topics/:type/:slug" element={<Study />} />
+          <Route path="/topics/:type/:slug/quiz" element={<Quiz />} />
+          <Route path="/topics/:type/:slug/score" element={<Score />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>

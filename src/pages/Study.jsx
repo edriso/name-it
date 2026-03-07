@@ -21,9 +21,9 @@ function getDefaultWordCount(total) {
 }
 
 export default function Study() {
-  const { slug } = useParams()
+  const { type, slug } = useParams()
   const navigate = useNavigate()
-  const topic = getTopic(slug)
+  const topic = getTopic(type, slug)
   const [secondsLeft, setSecondsLeft] = useState(STUDY_TIME)
   const [started, setStarted] = useState(false)
   const [timer, setTimer] = useState(30)
@@ -36,10 +36,10 @@ export default function Study() {
   const [wordCount, setWordCount] = useState(() => getDefaultWordCount(topic?.words.length ?? 0))
 
   const goToQuiz = useCallback(() => {
-    navigate(`/topics/${slug}/quiz`, {
+    navigate(`/topics/${type}/${slug}/quiz`, {
       state: { timer, shuffle, wordCount },
     })
-  }, [navigate, slug, timer, shuffle, wordCount])
+  }, [navigate, type, slug, timer, shuffle, wordCount])
 
   // Keyboard shortcut: Enter or Space to go to quiz
   useEffect(() => {

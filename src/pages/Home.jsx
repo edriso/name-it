@@ -100,7 +100,7 @@ export default function Home() {
                 transition={{ duration: 0.2 }}
               >
                 <Link
-                  to={`/topics/${topic.slug}`}
+                  to={`/topics/${topic.type}/${topic.slug}`}
                   className="group relative block overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl sm:p-6"
                 >
                   <div

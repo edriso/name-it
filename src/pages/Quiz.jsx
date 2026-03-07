@@ -27,10 +27,10 @@ function getHintText(display, hintsUsed) {
 }
 
 export default function Quiz() {
-  const { slug } = useParams()
+  const { type, slug } = useParams()
   const navigate = useNavigate()
   const { state } = useLocation()
-  const topic = getTopic(slug)
+  const topic = getTopic(type, slug)
   const inputRef = useRef(null)
   const resultsRef = useRef([])
   const [completedResults, setCompletedResults] = useState([])
@@ -80,7 +80,7 @@ export default function Quiz() {
       setCompletedResults(newResults)
 
       if (currentIndex + 1 >= totalQuestions) {
-        navigate(`/topics/${slug}/score`, {
+        navigate(`/topics/${type}/${slug}/score`, {
           state: {
             results: newResults,
             topic,
@@ -97,7 +97,17 @@ export default function Quiz() {
         setTimeout(() => inputRef.current?.focus(), 50)
       }
     },
-    [currentIndex, totalQuestions, navigate, slug, topic, questionTime, shouldShuffle, wordCount],
+    [
+      currentIndex,
+      totalQuestions,
+      navigate,
+      type,
+      slug,
+      topic,
+      questionTime,
+      shouldShuffle,
+      wordCount,
+    ],
   )
 
   const submitAnswer = useCallback(

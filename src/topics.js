@@ -26,12 +26,16 @@ const topics = Object.entries(topicModules).map(([path, mod]) => {
   }
 })
 
-const topicsBySlug = Object.fromEntries(topics.map((t) => [t.slug, t]))
+// Key by "type/slug" to support same slug across different types
+const topicsByKey = Object.fromEntries(topics.map((t) => [`${t.type}/${t.slug}`, t]))
+
+const VALID_TYPES = new Set(['image', 'definition'])
 
 export function getTopics() {
   return topics
 }
 
-export function getTopic(slug) {
-  return topicsBySlug[slug] || null
+export function getTopic(type, slug) {
+  if (!VALID_TYPES.has(type)) return null
+  return topicsByKey[`${type}/${slug}`] || null
 }
