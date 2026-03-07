@@ -32,7 +32,7 @@ export default function Quiz() {
   const [answer, setAnswer] = useState('')
   const [hintsUsed, setHintsUsed] = useState(0)
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME)
-  const [feedback, setFeedback] = useState(null) // 'correct' | 'wrong' | null
+  const [feedback, setFeedback] = useState(null)
   const [results, setResults] = useState([])
   const [locked, setLocked] = useState(false)
 
@@ -86,7 +86,6 @@ export default function Quiz() {
     [answer, currentWord, hintsUsed, timeLeft, locked, advanceQuestion],
   )
 
-  // Timer countdown
   useEffect(() => {
     if (locked || !topic) return
     if (timeLeft <= 0) {
@@ -108,7 +107,6 @@ export default function Quiz() {
     return () => clearTimeout(id)
   }, [timeLeft, locked, topic, currentWord, hintsUsed, advanceQuestion])
 
-  // Focus input on mount and question change
   useEffect(() => {
     inputRef.current?.focus()
   }, [currentIndex])
@@ -134,26 +132,24 @@ export default function Quiz() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="min-h-screen px-4 py-6 sm:py-10"
+      className="min-h-screen px-4 py-4 sm:py-6"
     >
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-6xl">
         {/* Header */}
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-3 flex items-center justify-between">
           <div className="text-sm font-medium text-gray-400">
             {currentIndex + 1} / {totalQuestions}
           </div>
           <h2 className="text-lg font-bold text-white">{topic.name}</h2>
-          <div className="flex items-center gap-2">
-            <span
-              className={`text-2xl font-extrabold tabular-nums ${timeLeft <= 5 ? 'text-danger' : 'text-white'}`}
-            >
-              {timeLeft}s
-            </span>
-          </div>
+          <span
+            className={`text-2xl font-extrabold tabular-nums ${timeLeft <= 5 ? 'text-danger' : 'text-white'}`}
+          >
+            {timeLeft}s
+          </span>
         </div>
 
         {/* Timer bar */}
-        <div className="mb-6 h-1.5 overflow-hidden rounded-full bg-surface-light">
+        <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-surface-light">
           <motion.div
             className={`h-full rounded-full ${timerColor}`}
             animate={{ width: `${timerPercent}%` }}
@@ -162,7 +158,7 @@ export default function Quiz() {
         </div>
 
         {/* Progress dots */}
-        <div className="mb-6 flex flex-wrap justify-center gap-1.5">
+        <div className="mb-4 flex flex-wrap justify-center gap-1.5">
           {topic.words.map((_, i) => {
             let dotClass = 'bg-surface-light'
             if (i < results.length) {
@@ -179,90 +175,101 @@ export default function Quiz() {
           })}
         </div>
 
-        {/* Image */}
-        <div className="relative mb-6 overflow-hidden rounded-2xl ring-1 ring-white/10">
-          <img src={topic.image} alt={topic.name} className="w-full" />
-        </div>
-
-        {/* Question area */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentIndex}
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -20, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className={`rounded-2xl p-5 ring-1 sm:p-6 ${
-              feedback === 'correct'
-                ? 'bg-success/10 ring-success/40'
-                : feedback === 'wrong'
-                  ? 'bg-danger/10 ring-danger/40'
-                  : 'bg-surface-light/50 ring-white/10'
-            } transition-colors duration-300`}
-          >
-            <h3 className="mb-1 text-center text-2xl font-extrabold text-white sm:text-3xl">
-              What is number{' '}
-              <span className="text-accent">{currentIndex + 1}</span>?
-            </h3>
-
-            {hint && (
-              <p className="mb-3 text-center font-mono text-lg tracking-widest text-primary-light">
-                {hint}
-              </p>
-            )}
-
-            <form onSubmit={handleSubmit} className="mt-4 flex gap-3">
-              <input
-                ref={inputRef}
-                type="text"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                disabled={locked}
-                placeholder="Type your answer..."
-                autoComplete="off"
-                className="flex-1 rounded-xl bg-surface px-4 py-3 text-lg font-medium text-white placeholder-gray-500 outline-none ring-1 ring-white/10 transition-all focus:ring-2 focus:ring-primary disabled:opacity-50"
+        {/* Main content — side by side on large screens */}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+          {/* Image */}
+          <div className="overflow-hidden rounded-2xl ring-1 ring-white/10 lg:flex-1">
+            <div className="flex justify-center bg-black/30">
+              <img
+                src={topic.image}
+                alt={topic.name}
+                className="max-h-[40vh] w-full object-contain lg:max-h-[60vh]"
               />
-              <button
-                type="submit"
-                disabled={locked || !answer.trim()}
-                className="rounded-xl bg-gradient-to-r from-primary to-primary-dark px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
-              >
-                Go!
-              </button>
-            </form>
-
-            <div className="mt-3 flex items-center justify-between">
-              <button
-                onClick={() => setHintsUsed((h) => Math.min(h + 1, 3))}
-                disabled={locked || hintsUsed >= 3}
-                className="rounded-lg bg-accent/20 px-4 py-2 text-sm font-semibold text-accent transition-all hover:bg-accent/30 disabled:opacity-30"
-              >
-                {hintsUsed >= 3
-                  ? 'No more hints'
-                  : `Hint 💡 (${3 - hintsUsed} left)`}
-              </button>
-
-              {feedback === 'correct' && (
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="text-lg font-bold text-success"
-                >
-                  Correct! ✅
-                </motion.span>
-              )}
-              {feedback === 'wrong' && (
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="text-lg font-bold text-danger"
-                >
-                  It was: {currentWord} ❌
-                </motion.span>
-              )}
             </div>
-          </motion.div>
-        </AnimatePresence>
+          </div>
+
+          {/* Question area */}
+          <div className="lg:w-96 lg:flex-shrink-0">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -20, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className={`rounded-2xl p-5 ring-1 ${
+                  feedback === 'correct'
+                    ? 'bg-success/10 ring-success/40'
+                    : feedback === 'wrong'
+                      ? 'bg-danger/10 ring-danger/40'
+                      : 'bg-surface-light/50 ring-white/10'
+                } transition-colors duration-300`}
+              >
+                <h3 className="mb-1 text-center text-2xl font-extrabold text-white sm:text-3xl">
+                  What is number{' '}
+                  <span className="text-accent">{currentIndex + 1}</span>?
+                </h3>
+
+                {hint && (
+                  <p className="mb-3 text-center font-mono text-lg tracking-widest text-primary-light">
+                    {hint}
+                  </p>
+                )}
+
+                <form onSubmit={handleSubmit} className="mt-4 flex gap-3">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
+                    disabled={locked}
+                    placeholder="Type your answer..."
+                    autoComplete="off"
+                    className="min-w-0 flex-1 rounded-xl bg-surface px-4 py-3 text-lg font-medium text-white placeholder-gray-500 outline-none ring-1 ring-white/10 transition-all focus:ring-2 focus:ring-primary disabled:opacity-50"
+                  />
+                  <button
+                    type="submit"
+                    disabled={locked || !answer.trim()}
+                    className="rounded-xl bg-gradient-to-r from-primary to-primary-dark px-5 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
+                  >
+                    Go!
+                  </button>
+                </form>
+
+                <div className="mt-3 flex items-center justify-between">
+                  <button
+                    onClick={() => setHintsUsed((h) => Math.min(h + 1, 3))}
+                    disabled={locked || hintsUsed >= 3}
+                    className="rounded-lg bg-accent/20 px-4 py-2 text-sm font-semibold text-accent transition-all hover:bg-accent/30 disabled:opacity-30"
+                  >
+                    {hintsUsed >= 3
+                      ? 'No more hints'
+                      : `Hint 💡 (${3 - hintsUsed} left)`}
+                  </button>
+
+                  {feedback === 'correct' && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="text-lg font-bold text-success"
+                    >
+                      Correct! ✅
+                    </motion.span>
+                  )}
+                  {feedback === 'wrong' && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="text-lg font-bold text-danger"
+                    >
+                      It was: {currentWord} ❌
+                    </motion.span>
+                  )}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </motion.div>
   )

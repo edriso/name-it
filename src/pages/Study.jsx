@@ -66,11 +66,11 @@ export default function Study() {
           transition={{ delay: 0.1 }}
           className="relative overflow-hidden rounded-2xl bg-surface-light/50 ring-1 ring-white/10"
         >
-          <div className="relative">
+          <div className="relative flex justify-center bg-black/30">
             <img
               src={topic.image}
               alt={topic.name}
-              className="w-full"
+              className="max-h-[50vh] w-full object-contain"
             />
           </div>
 
