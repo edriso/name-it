@@ -5,7 +5,7 @@ import { getTopic } from '../topics'
 import ZoomableImage from '../components/ZoomableImage'
 
 const STUDY_TIME = 30
-const TIMER_OPTIONS = [10, 15, 20, 30]
+const TIMER_OPTIONS = [15, 20, 30, 60]
 
 function getWordCountOptions(total) {
   const options = []
@@ -22,7 +22,7 @@ export default function Study() {
   const topic = getTopic(slug)
   const [secondsLeft, setSecondsLeft] = useState(STUDY_TIME)
   const [started, setStarted] = useState(false)
-  const [timer, setTimer] = useState(15)
+  const [timer, setTimer] = useState(30)
   const [shuffle, setShuffle] = useState(true)
 
   const wordCountOptions = useMemo(

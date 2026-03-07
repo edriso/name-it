@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { getTopic } from '../topics'
 import ZoomableImage from '../components/ZoomableImage'
 
-const DEFAULT_TIME = 15
+const DEFAULT_TIME = 30
 const EMPTY_ACCEPTS = []
 const CORRECT_DELAY = 800
 const WRONG_DELAY = 1800
