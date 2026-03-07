@@ -112,7 +112,7 @@ export default function Study() {
               animate={{ y: 0, opacity: 1 }}
               className="text-3xl font-extrabold sm:text-4xl"
             >
-              Study Time! 👀
+              Study Time
             </motion.h1>
             <p className="mt-2 text-foreground/50">
               {topic.type === 'definition'
@@ -281,7 +281,7 @@ export default function Study() {
                   onClick={goToQuiz}
                   className="cursor-pointer rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:brightness-110"
                 >
-                  I'm Ready! 🚀
+                  I'm Ready!
                 </button>
               </div>
               <span className="text-[10px] text-foreground/30">Press Enter to start quiz</span>

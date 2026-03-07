@@ -379,7 +379,7 @@ export default function Quiz() {
                         disabled={locked || hintsUsed >= 3}
                         className="cursor-pointer rounded-lg bg-highlight/20 px-3 py-2 text-sm font-semibold text-highlight transition-all hover:bg-highlight/30 disabled:opacity-30"
                       >
-                        {hintsUsed >= 3 ? 'Revealed' : `Hint 💡`}
+                        {hintsUsed >= 3 ? 'Revealed' : 'Hint'}
                       </button>
                       <button
                         onClick={handleSkip}

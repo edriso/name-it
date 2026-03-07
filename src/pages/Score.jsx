@@ -6,7 +6,7 @@ const TITLES = [
   { min: 100, title: 'Vocabulary Master', emoji: '🏆', color: 'text-[#c97b63]' },
   { min: 90, title: 'Word Wizard', emoji: '🧙', color: 'text-[#8b7ea8]' },
   { min: 80, title: 'Language Star', emoji: '🌟', color: 'text-[#6d9aaa]' },
-  { min: 70, title: 'Quick Learner', emoji: '🚀', color: 'text-[#81b29a]' },
+  { min: 70, title: 'Quick Learner', emoji: '📚', color: 'text-[#81b29a]' },
   { min: 60, title: 'Word Explorer', emoji: '🧭', color: 'text-[#5c6078]' },
   { min: 40, title: 'Rising Scholar', emoji: '📖', color: 'text-[#b8876e]' },
   { min: 20, title: 'Word Apprentice', emoji: '✏️', color: 'text-[#a07e7e]' },
@@ -243,14 +243,14 @@ export default function Score() {
             aria-label="Save result as image"
             className="cursor-pointer rounded-xl bg-highlight px-6 py-3 font-bold text-white shadow-lg shadow-highlight/20 transition-all hover:brightness-110 disabled:opacity-50"
           >
-            {downloading ? 'Saving...' : 'Save Result 📸'}
+            {downloading ? 'Saving...' : 'Save Result'}
           </button>
           <div className="flex flex-col items-center gap-1">
             <button
               onClick={handleTryAgain}
               className="cursor-pointer rounded-xl bg-primary px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110"
             >
-              Try Again 🔁
+              Try Again
             </button>
             <span className="text-[10px] text-foreground/30">Press R or Enter</span>
           </div>
@@ -258,13 +258,13 @@ export default function Score() {
             onClick={() => navigate(`/topics/${type}/${slug}`)}
             className="cursor-pointer rounded-xl bg-card px-6 py-3 font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
           >
-            Study Again 📖
+            Study Again
           </button>
           <Link
             to="/"
             className="rounded-xl bg-card px-6 py-3 text-center font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
           >
-            New Topic 🏠
+            New Topic
           </Link>
         </motion.div>
       </div>
