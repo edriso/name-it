@@ -1,25 +1,13 @@
-const topicModules = import.meta.glob('./assets/topics/*.js', { eager: true })
-
-const imageModules = import.meta.glob('./assets/topics/*.{jpg,jpeg,png,webp}', {
-  eager: true,
-  import: 'default',
-})
-
-function resolveImage(filename) {
-  for (const [path, url] of Object.entries(imageModules)) {
-    if (path.endsWith(`/${filename}`)) return url
-  }
-  return null
-}
+const topicModules = import.meta.glob('./assets/topics/*/index.js', { eager: true })
 
 export function getTopics() {
   return Object.entries(topicModules).map(([path, mod]) => {
-    const slug = path.split('/').pop().replace('.js', '')
+    const slug = path.split('/').at(-2)
     const topic = mod.default
     return {
       slug,
       name: topic.name,
-      image: resolveImage(topic.image),
+      cover: topic.cover,
       words: topic.words,
     }
   })

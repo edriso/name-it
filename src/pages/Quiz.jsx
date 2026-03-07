@@ -181,7 +181,7 @@ export default function Quiz() {
           <div className="overflow-hidden rounded-2xl ring-1 ring-white/10 lg:flex-1">
             <div className="flex justify-center bg-black/30">
               <img
-                src={topic.image}
+                src={topic.cover}
                 alt={topic.name}
                 className="max-h-[40vh] w-full object-contain lg:max-h-[60vh]"
               />

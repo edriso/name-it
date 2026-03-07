@@ -11,12 +11,32 @@ A fun, interactive vocabulary quiz game for young students, inspired by the Oxfo
 
 ## Adding New Topics
 
-Just drop two files into `src/assets/topics/`:
+Create a folder in `src/assets/topics/` with two files:
 
-1. A topic definition: `your-topic.js`
-2. Its image: `your-topic.jpg`
+```
+src/assets/topics/
+  your-topic/
+    index.js      ← topic definition
+    cover.jpeg    ← illustrated image with numbered items
+```
 
-The app auto-discovers new topics — no code changes needed.
+The `index.js` file:
+
+```js
+import cover from './cover.jpeg'
+
+export default {
+  name: "Your Topic Name",
+  cover,
+  words: [
+    "word1",    // 1
+    "word2",    // 2
+    "word3",    // 3
+  ],
+}
+```
+
+That's it — the app auto-discovers new topics. No other code changes needed.
 
 ## Tech Stack
 

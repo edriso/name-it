@@ -1,6 +1,8 @@
+import cover from './cover.jpeg'
+
 export default {
   name: "On a Building Site",
-  image: "building-site.jpeg",
+  cover,
   words: [
     "crane",
     "bricklayer",

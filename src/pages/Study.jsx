@@ -68,7 +68,7 @@ export default function Study() {
         >
           <div className="relative flex justify-center bg-black/30">
             <img
-              src={topic.image}
+              src={topic.cover}
               alt={topic.name}
               className="max-h-[50vh] w-full object-contain"
             />
