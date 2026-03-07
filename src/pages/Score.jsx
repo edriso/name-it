@@ -87,6 +87,19 @@ export default function Score() {
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: '#f4f1de',
         scale: 2,
+        onclone: (clonedDoc) => {
+          Array.from(document.styleSheets).forEach((sheet) => {
+            try {
+              const style = clonedDoc.createElement('style')
+              style.textContent = Array.from(sheet.cssRules)
+                .map((r) => r.cssText)
+                .join('\n')
+              clonedDoc.head.appendChild(style)
+            } catch {
+              // skip CORS-restricted sheets
+            }
+          })
+        },
       })
       const link = document.createElement('a')
       link.download = `nameit-${slug}-${totalScore}pts.png`
