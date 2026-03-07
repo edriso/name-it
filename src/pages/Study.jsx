@@ -305,7 +305,7 @@ export default function Study() {
                 onClick={goToQuiz}
                 className="cursor-pointer rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:brightness-110"
               >
-                I'm Ready! 🚀
+                I'm Ready!
               </button>
             </>
           )}
