@@ -37,12 +37,12 @@ The `index.js` file:
 import cover from './cover.jpeg'
 
 export default {
-  name: "Your Topic Name",
+  name: 'Your Topic Name',
   cover,
   words: [
-    "word1",    // 1
-    "word2",    // 2
-    "word3",    // 3
+    'word1', // 1
+    'word2', // 2
+    'word3', // 3
   ],
 }
 ```

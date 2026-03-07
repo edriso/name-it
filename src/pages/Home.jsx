@@ -55,18 +55,27 @@ export default function Home() {
                 to={`/topics/${topic.slug}`}
                 className="group relative block overflow-hidden rounded-2xl p-5 sm:p-6 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${CARD_COLORS[i % CARD_COLORS.length]} opacity-90 transition-opacity group-hover:opacity-100`} />
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${CARD_COLORS[i % CARD_COLORS.length]} opacity-90 transition-opacity group-hover:opacity-100`}
+                />
                 <div className="relative z-10">
-                  <h2 className="text-xl font-extrabold text-white sm:text-2xl">
-                    {topic.name}
-                  </h2>
+                  <h2 className="text-xl font-extrabold text-white sm:text-2xl">{topic.name}</h2>
                   <p className="mt-2 text-sm font-medium text-white/70">
                     {topic.words.length} words to learn
                   </p>
                   <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 text-sm font-bold text-white backdrop-blur-sm">
                     Start
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
-                      <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="h-4 w-4"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -78,7 +87,12 @@ export default function Home() {
         {topics.length === 0 && (
           <div className="mt-20 text-center text-foreground/40">
             <p className="text-2xl">No topics yet!</p>
-            <p className="mt-2">Add a topic file to <code className="rounded bg-muted px-2 py-1 text-sm text-primary">src/assets/topics/</code></p>
+            <p className="mt-2">
+              Add a topic file to{' '}
+              <code className="rounded bg-muted px-2 py-1 text-sm text-primary">
+                src/assets/topics/
+              </code>
+            </p>
           </div>
         )}
       </div>

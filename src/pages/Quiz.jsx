@@ -69,7 +69,11 @@ export default function Quiz() {
 
       if (currentIndex + 1 >= totalQuestions) {
         navigate(`/topics/${slug}/score`, {
-          state: { results: newResults, topic, settings: { timer: questionTime, shuffle: shouldShuffle, wordCount } },
+          state: {
+            results: newResults,
+            topic,
+            settings: { timer: questionTime, shuffle: shouldShuffle, wordCount },
+          },
         })
       } else {
         setCurrentIndex((i) => i + 1)
@@ -166,7 +170,9 @@ export default function Quiz() {
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <p className="text-2xl text-foreground/60">Topic not found</p>
-          <Link to="/" className="mt-4 inline-block text-primary underline">Go back</Link>
+          <Link to="/" className="mt-4 inline-block text-primary underline">
+            Go back
+          </Link>
         </div>
       </div>
     )
@@ -175,7 +181,11 @@ export default function Quiz() {
   const hint = getHintText(currentWord, hintsUsed)
   const timerPercent = (timeLeft / questionTime) * 100
   const timerColor =
-    timeLeft > questionTime * 0.66 ? 'bg-success' : timeLeft > questionTime * 0.33 ? 'bg-amber-500' : 'bg-danger'
+    timeLeft > questionTime * 0.66
+      ? 'bg-success'
+      : timeLeft > questionTime * 0.33
+        ? 'bg-amber-500'
+        : 'bg-danger'
 
   return (
     <motion.div
@@ -193,8 +203,17 @@ export default function Quiz() {
               className="flex h-8 w-8 items-center justify-center rounded-lg bg-card text-foreground/50 ring-1 ring-border transition-colors hover:bg-card-hover hover:text-foreground"
               title="Exit quiz"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
-                <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="h-4 w-4"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
+                  clipRule="evenodd"
+                />
               </svg>
             </Link>
             <span className="text-sm font-medium text-foreground/50">
@@ -228,10 +247,7 @@ export default function Quiz() {
               dotClass = 'bg-primary ring-2 ring-primary/50'
             }
             return (
-              <div
-                key={i}
-                className={`h-2.5 w-2.5 rounded-full transition-colors ${dotClass}`}
-              />
+              <div key={i} className={`h-2.5 w-2.5 rounded-full transition-colors ${dotClass}`} />
             )
           })}
         </div>
@@ -265,8 +281,7 @@ export default function Quiz() {
                 } transition-colors duration-300`}
               >
                 <h3 className="mb-1 text-center text-2xl font-extrabold text-foreground sm:text-3xl">
-                  What is number{' '}
-                  <span className="text-primary">{currentNumber}</span>?
+                  What is number <span className="text-primary">{currentNumber}</span>?
                 </h3>
 
                 {hint && (

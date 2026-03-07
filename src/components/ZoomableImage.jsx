@@ -14,7 +14,9 @@ function ImageViewer({ src, alt, onClose }) {
   useEffect(() => {
     const original = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = original }
+    return () => {
+      document.body.style.overflow = original
+    }
   }, [])
 
   useEffect(() => {
@@ -95,7 +97,7 @@ function ImageViewer({ src, alt, onClose }) {
 
   function handleDoubleClick(e) {
     e.stopPropagation()
-    setScale((s) => s > 1 ? 1 : 3)
+    setScale((s) => (s > 1 ? 1 : 3))
   }
 
   return createPortal(
@@ -115,7 +117,12 @@ function ImageViewer({ src, alt, onClose }) {
           aria-label="Close image viewer"
           className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-5 w-5"
+          >
             <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
@@ -156,7 +163,10 @@ function ImageViewer({ src, alt, onClose }) {
             −
           </button>
           <button
-            onClick={() => { setScale(1); setTranslate({ x: 0, y: 0 }) }}
+            onClick={() => {
+              setScale(1)
+              setTranslate({ x: 0, y: 0 })
+            }}
             className="min-w-[3.5rem] px-2 text-sm font-medium text-gray-300 tabular-nums transition-colors hover:text-white"
           >
             {Math.round(scale * 100)}%
@@ -188,7 +198,12 @@ export default function ZoomableImage({ src, alt, className = '' }) {
         role="button"
         tabIndex={0}
         aria-label={`View ${alt} fullscreen`}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(true) } }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setOpen(true)
+          }
+        }}
       >
         <img
           src={src}
@@ -198,7 +213,12 @@ export default function ZoomableImage({ src, alt, className = '' }) {
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/30">
           <div className="flex items-center gap-2 rounded-full bg-black/60 px-4 py-2.5 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="h-4 w-4 text-white"
+            >
               <path d="M13.28 7.78l3.22-3.22v2.69a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.69l-3.22 3.22a.75.75 0 001.06 1.06zM2 17.25v-4.5a.75.75 0 011.5 0v2.69l3.22-3.22a.75.75 0 011.06 1.06L4.56 16.5h2.69a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75zM12.22 13.28l3.22 3.22h-2.69a.75.75 0 000 1.5h4.5a.75.75 0 00.75-.75v-4.5a.75.75 0 00-1.5 0v2.69l-3.22-3.22a.75.75 0 00-1.06 1.06zM3.5 4.56l3.22 3.22a.75.75 0 001.06-1.06L4.56 3.5h2.69a.75.75 0 000-1.5h-4.5a.75.75 0 00-.75.75v4.5a.75.75 0 001.5 0V4.56z" />
             </svg>
             <span className="text-sm font-medium text-white">Tap to zoom</span>

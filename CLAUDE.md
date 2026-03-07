@@ -56,9 +56,9 @@ src/
 import cover from './cover.jpeg'
 
 export default {
-  name: "Your Topic Name",
+  name: 'Your Topic Name',
   cover,
-  words: ["word1", "word2", "word3"],
+  words: ['word1', 'word2', 'word3'],
 }
 ```
 

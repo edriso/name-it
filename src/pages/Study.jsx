@@ -97,9 +97,7 @@ export default function Study() {
             >
               Study Time! 👀
             </motion.h1>
-            <p className="mt-2 text-foreground/50">
-              Memorize the words — the quiz is coming!
-            </p>
+            <p className="mt-2 text-foreground/50">Memorize the words — the quiz is coming!</p>
           </div>
         </div>
 
@@ -110,11 +108,7 @@ export default function Study() {
           transition={{ delay: 0.1 }}
           className="overflow-hidden rounded-2xl ring-1 ring-border"
         >
-          <ZoomableImage
-            src={topic.cover}
-            alt={topic.name}
-            className="h-[45vh] bg-muted"
-          />
+          <ZoomableImage src={topic.cover} alt={topic.name} className="h-[45vh] bg-muted" />
         </motion.div>
 
         {/* Word list */}
@@ -137,9 +131,7 @@ export default function Study() {
                 <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
                   {i + 1}
                 </span>
-                <span className="text-sm font-medium text-foreground/80">
-                  {word}
-                </span>
+                <span className="text-sm font-medium text-foreground/80">{word}</span>
               </motion.div>
             ))}
           </div>
@@ -159,9 +151,7 @@ export default function Study() {
             {/* Words */}
             {wordCountOptions.length > 1 && (
               <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-foreground/60">
-                  Words
-                </span>
+                <span className="text-sm font-medium text-foreground/60">Words</span>
                 <div className="flex gap-1.5">
                   {wordCountOptions.map((c) => (
                     <button
@@ -182,9 +172,7 @@ export default function Study() {
 
             {/* Timer */}
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-foreground/60">
-                Timer
-              </span>
+              <span className="text-sm font-medium text-foreground/60">Timer</span>
               <div className="flex gap-1.5">
                 {TIMER_OPTIONS.map((t) => (
                   <button
@@ -204,9 +192,7 @@ export default function Study() {
 
             {/* Order */}
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-foreground/60">
-                Order
-              </span>
+              <span className="text-sm font-medium text-foreground/60">Order</span>
               <div className="flex gap-1.5">
                 <button
                   onClick={() => setShuffle(true)}

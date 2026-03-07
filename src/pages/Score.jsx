@@ -4,13 +4,13 @@ import { motion } from 'framer-motion'
 
 const TITLES = [
   { min: 100, title: 'Vocabulary Master', emoji: '🏆', color: 'from-amber-400 to-yellow-500' },
-  { min: 90,  title: 'Word Wizard',       emoji: '🧙', color: 'from-violet-400 to-purple-500' },
-  { min: 80,  title: 'Language Star',      emoji: '🌟', color: 'from-cyan-400 to-blue-500' },
-  { min: 70,  title: 'Quick Learner',      emoji: '🚀', color: 'from-emerald-400 to-green-500' },
-  { min: 60,  title: 'Word Explorer',      emoji: '🧭', color: 'from-teal-400 to-emerald-500' },
-  { min: 40,  title: 'Rising Scholar',     emoji: '📖', color: 'from-orange-400 to-amber-500' },
-  { min: 20,  title: 'Word Apprentice',    emoji: '✏️', color: 'from-rose-400 to-pink-500' },
-  { min: 0,   title: 'Word Rookie',        emoji: '🌱', color: 'from-gray-400 to-gray-500' },
+  { min: 90, title: 'Word Wizard', emoji: '🧙', color: 'from-violet-400 to-purple-500' },
+  { min: 80, title: 'Language Star', emoji: '🌟', color: 'from-cyan-400 to-blue-500' },
+  { min: 70, title: 'Quick Learner', emoji: '🚀', color: 'from-emerald-400 to-green-500' },
+  { min: 60, title: 'Word Explorer', emoji: '🧭', color: 'from-teal-400 to-emerald-500' },
+  { min: 40, title: 'Rising Scholar', emoji: '📖', color: 'from-orange-400 to-amber-500' },
+  { min: 20, title: 'Word Apprentice', emoji: '✏️', color: 'from-rose-400 to-pink-500' },
+  { min: 0, title: 'Word Rookie', emoji: '🌱', color: 'from-gray-400 to-gray-500' },
 ]
 
 function getTitle(percent) {
@@ -25,12 +25,13 @@ export default function Score() {
   const [downloading, setDownloading] = useState(false)
 
   const particles = useMemo(
-    () => Array.from({ length: 20 }, () => ({
-      x: 50 + (Math.random() - 0.5) * 20,
-      rotate: Math.random() > 0.5 ? 360 : -360,
-      duration: 2 + Math.random() * 2,
-      delay: Math.random() * 1.5,
-    })),
+    () =>
+      Array.from({ length: 20 }, () => ({
+        x: 50 + (Math.random() - 0.5) * 20,
+        rotate: Math.random() > 0.5 ? 360 : -360,
+        duration: 2 + Math.random() * 2,
+        delay: Math.random() * 1.5,
+      })),
     [],
   )
 
@@ -39,7 +40,9 @@ export default function Score() {
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <p className="text-2xl text-foreground/60">No results found</p>
-          <Link to="/" className="mt-4 inline-block text-primary underline">Go home</Link>
+          <Link to="/" className="mt-4 inline-block text-primary underline">
+            Go home
+          </Link>
         </div>
       </div>
     )
@@ -113,7 +116,9 @@ export default function Score() {
             className="mb-6 text-center"
           >
             <span className="text-6xl">{title.emoji}</span>
-            <h2 className={`mt-2 bg-gradient-to-r ${title.color} bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl`}>
+            <h2
+              className={`mt-2 bg-gradient-to-r ${title.color} bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl`}
+            >
               {title.title}
             </h2>
           </motion.div>
@@ -140,7 +145,9 @@ export default function Score() {
             className="mb-6 grid grid-cols-3 gap-3"
           >
             <div className="rounded-xl bg-muted p-4 text-center ring-1 ring-border">
-              <div className="text-2xl font-extrabold text-success">{correctCount}/{results.length}</div>
+              <div className="text-2xl font-extrabold text-success">
+                {correctCount}/{results.length}
+              </div>
               <div className="mt-1 text-xs text-foreground/50">Correct</div>
             </div>
             <div className="rounded-xl bg-muted p-4 text-center ring-1 ring-border">
@@ -191,7 +198,11 @@ export default function Score() {
                     )}
                     <span
                       className={`min-w-[3rem] text-right text-sm font-bold ${
-                        r.score > 100 ? 'text-amber-500' : r.score > 0 ? 'text-success' : 'text-foreground/30'
+                        r.score > 100
+                          ? 'text-amber-500'
+                          : r.score > 0
+                            ? 'text-success'
+                            : 'text-foreground/30'
                       }`}
                     >
                       {r.score} pts
