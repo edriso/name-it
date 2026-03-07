@@ -221,6 +221,7 @@ export default function Quiz() {
               to="/"
               className="flex h-8 w-8 items-center justify-center rounded-lg bg-card text-foreground/50 ring-1 ring-border transition-colors hover:bg-card-hover hover:text-foreground"
               title="Exit quiz"
+              aria-label="Exit quiz"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -323,7 +324,8 @@ export default function Quiz() {
                   <button
                     type="submit"
                     disabled={locked || !answer.trim()}
-                    className="rounded-xl bg-primary px-5 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110 disabled:opacity-40"
+                    aria-label="Submit answer"
+                    className="cursor-pointer rounded-xl bg-primary px-5 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110 disabled:opacity-40"
                   >
                     Go!
                   </button>

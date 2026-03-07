@@ -244,7 +244,8 @@ export default function Score() {
           <button
             onClick={handleDownload}
             disabled={downloading}
-            className="rounded-xl bg-amber-500 px-6 py-3 font-bold text-white shadow-lg shadow-amber-500/20 transition-all hover:brightness-110 disabled:opacity-50"
+            aria-label="Save result as image"
+            className="cursor-pointer rounded-xl bg-amber-500 px-6 py-3 font-bold text-white shadow-lg shadow-amber-500/20 transition-all hover:brightness-110 disabled:opacity-50"
           >
             {downloading ? 'Saving...' : 'Save Result 📸'}
           </button>
@@ -259,7 +260,7 @@ export default function Score() {
           </div>
           <button
             onClick={() => navigate(`/topics/${slug}`)}
-            className="rounded-xl bg-card px-6 py-3 font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
+            className="cursor-pointer rounded-xl bg-card px-6 py-3 font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
           >
             Study Again 📖
           </button>
