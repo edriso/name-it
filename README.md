@@ -11,10 +11,10 @@ A fun, interactive vocabulary quiz game for young students, inspired by the Oxfo
 
 ## Adding New Topics
 
-Just drop two files:
+Just drop two files into `src/assets/topics/`:
 
-1. A topic file in `src/assets/topics/your-topic.js`
-2. An image in `src/assets/images/your-topic.jpg`
+1. A topic definition: `your-topic.js`
+2. Its image: `your-topic.jpg`
 
 The app auto-discovers new topics — no code changes needed.
 

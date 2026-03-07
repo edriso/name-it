@@ -13,7 +13,7 @@ export default function Study() {
   const [started, setStarted] = useState(false)
 
   const goToQuiz = useCallback(() => {
-    navigate(`/quiz/${slug}`)
+    navigate(`/topics/${slug}/quiz`)
   }, [navigate, slug])
 
   useEffect(() => {

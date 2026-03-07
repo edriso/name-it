@@ -1,6 +1,6 @@
 const topicModules = import.meta.glob('./assets/topics/*.js', { eager: true })
 
-const imageModules = import.meta.glob('./assets/images/*.{jpg,jpeg,png,webp}', {
+const imageModules = import.meta.glob('./assets/topics/*.{jpg,jpeg,png,webp}', {
   eager: true,
   import: 'default',
 })

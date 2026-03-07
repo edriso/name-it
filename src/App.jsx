@@ -12,9 +12,9 @@ export default function App() {
         <AnimatePresence mode="wait">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/study/:slug" element={<Study />} />
-            <Route path="/quiz/:slug" element={<Quiz />} />
-            <Route path="/score/:slug" element={<Score />} />
+            <Route path="/topics/:slug" element={<Study />} />
+            <Route path="/topics/:slug/quiz" element={<Quiz />} />
+            <Route path="/topics/:slug/score" element={<Score />} />
           </Routes>
         </AnimatePresence>
       </div>

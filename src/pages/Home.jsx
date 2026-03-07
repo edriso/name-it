@@ -52,7 +52,7 @@ export default function Home() {
               transition={{ delay: 0.15 + i * 0.08 }}
             >
               <Link
-                to={`/study/${topic.slug}`}
+                to={`/topics/${topic.slug}`}
                 className="group relative block overflow-hidden rounded-2xl bg-gradient-to-br p-5 sm:p-6 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl"
                 style={{}}
               >

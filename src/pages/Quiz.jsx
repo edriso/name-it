@@ -45,7 +45,7 @@ export default function Quiz() {
       setResults(newResults)
 
       if (currentIndex + 1 >= totalQuestions) {
-        navigate(`/score/${slug}`, { state: { results: newResults, topic } })
+        navigate(`/topics/${slug}/score`, { state: { results: newResults, topic } })
       } else {
         setCurrentIndex((i) => i + 1)
         setAnswer('')

@@ -190,13 +190,13 @@ export default function Score() {
           className="flex flex-col gap-3 sm:flex-row sm:justify-center"
         >
           <button
-            onClick={() => navigate(`/quiz/${slug}`)}
+            onClick={() => navigate(`/topics/${slug}/quiz`)}
             className="rounded-xl bg-gradient-to-r from-primary to-primary-dark px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105"
           >
             Try Again 🔁
           </button>
           <button
-            onClick={() => navigate(`/study/${slug}`)}
+            onClick={() => navigate(`/topics/${slug}`)}
             className="rounded-xl bg-surface-light px-6 py-3 font-semibold text-gray-300 ring-1 ring-white/10 transition-all hover:bg-surface-light/80"
           >
             Study Again 📖
