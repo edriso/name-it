@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getTopic } from '../topics'
+import ZoomableImage from '../components/ZoomableImage'
 
 const QUESTION_TIME = 15
 
@@ -190,13 +191,11 @@ export default function Quiz() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
           {/* Image */}
           <div className="overflow-hidden rounded-2xl ring-1 ring-white/10 lg:flex-1">
-            <div className="flex justify-center bg-black/30">
-              <img
-                src={topic.cover}
-                alt={topic.name}
-                className="max-h-[40vh] w-full object-contain lg:max-h-[60vh]"
-              />
-            </div>
+            <ZoomableImage
+              src={topic.cover}
+              alt={topic.name}
+              className="max-h-[40vh] bg-black/30 lg:max-h-[60vh]"
+            />
           </div>
 
           {/* Question area */}

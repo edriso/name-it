@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { getTopic } from '../topics'
+import ZoomableImage from '../components/ZoomableImage'
 
 const STUDY_TIME = 30
 
@@ -77,13 +78,11 @@ export default function Study() {
           transition={{ delay: 0.1 }}
           className="relative overflow-hidden rounded-2xl bg-surface-light/50 ring-1 ring-white/10"
         >
-          <div className="relative flex justify-center bg-black/30">
-            <img
-              src={topic.cover}
-              alt={topic.name}
-              className="max-h-[50vh] w-full object-contain"
-            />
-          </div>
+          <ZoomableImage
+            src={topic.cover}
+            alt={topic.name}
+            className="max-h-[50vh] bg-black/30"
+          />
 
           <div className="p-5 sm:p-6">
             <h2 className="mb-4 text-xl font-bold text-primary-light">{topic.name}</h2>
