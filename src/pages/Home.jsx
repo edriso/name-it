@@ -119,9 +119,9 @@ export default function Home() {
                       <p className="text-sm font-medium text-white/70">
                         {topic.words.length} words to learn
                       </p>
-                      {topic.type === 'definition' && (
+                      {filter === 'all' && (
                         <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-semibold text-white backdrop-blur-sm">
-                          Definitions
+                          {topic.type === 'definition' ? 'Definitions' : 'Pictures'}
                         </span>
                       )}
                     </div>
