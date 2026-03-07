@@ -39,17 +39,19 @@ export default function Score() {
     if (state?.settings) navigate(`/topics/${type}/${slug}/quiz`, { state: state.settings })
   }, [navigate, type, slug, state])
 
-  // Keyboard shortcuts: R or Enter to try again
+  // Keyboard shortcuts: R or Enter to try again, Escape to go home
   useEffect(() => {
     function handleKey(e) {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return
       if (e.key === 'r' || e.key === 'R' || e.key === 'Enter') {
         handleTryAgain()
+      } else if (e.key === 'Escape') {
+        navigate('/')
       }
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [handleTryAgain])
+  }, [handleTryAgain, navigate])
 
   if (!state?.results) {
     return (
@@ -81,7 +83,7 @@ export default function Score() {
     if (!cardRef.current || downloading) return
     setDownloading(true)
     try {
-      const { default: html2canvas } = await import('html2canvas')
+      const { default: html2canvas } = await import('html2canvas-pro')
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: '#f4f1de',
         scale: 2,
@@ -250,20 +252,19 @@ export default function Score() {
               {downloading ? 'Saving...' : 'Save Result'}
             </span>
           </button>
-          <div className="flex flex-col items-center gap-1">
-            <button
-              onClick={handleTryAgain}
-              className="cursor-pointer rounded-xl bg-primary px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110"
-            >
-              Try Again
-            </button>
-            <span className="text-[10px] text-foreground/30">Press R or Enter</span>
-          </div>
+          <button
+            onClick={handleTryAgain}
+            className="cursor-pointer rounded-xl bg-primary px-6 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110"
+          >
+            Try Again
+            <kbd className="ml-2 hidden rounded bg-white/20 px-1 text-[10px] sm:inline">R</kbd>
+          </button>
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-xl bg-card px-6 py-3 font-semibold text-foreground/70 ring-1 ring-border transition-all hover:bg-card-hover"
           >
             New Topic
+            <kbd className="ml-2 hidden rounded bg-foreground/10 px-1 text-[10px] sm:inline">Esc</kbd>
           </Link>
         </motion.div>
       </div>
