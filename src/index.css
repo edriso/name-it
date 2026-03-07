@@ -2,18 +2,19 @@
 
 @theme {
   /* Warm storybook palette */
-  --color-background: #faf7f2;
-  --color-foreground: #2c1810;
-  --color-card: #fff8f0;
-  --color-card-solid: #faf7f2;
-  --color-card-hover: #f5ede3;
-  --color-muted: #f0e6d8;
-  --color-border: #e0d0be;
-  --color-primary: #b45309;
-  --color-primary-light: #d97706;
-  --color-accent: #9333ea;
-  --color-success: #16a34a;
-  --color-danger: #dc2626;
+  --color-background: #f4f1de;
+  --color-foreground: #3d405b;
+  --color-card: #faf7ea;
+  --color-card-solid: #f4f1de;
+  --color-card-hover: #ece7d3;
+  --color-muted: #e6dfcd;
+  --color-border: #d5ccb8;
+  --color-primary: #e07a5f;
+  --color-primary-light: #e8967f;
+  --color-accent: #8b7ea8;
+  --color-success: #81b29a;
+  --color-danger: #c96060;
+  --color-highlight: #d4a362;
 }
 
 body {

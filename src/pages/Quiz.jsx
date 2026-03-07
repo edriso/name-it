@@ -264,7 +264,7 @@ export default function Quiz() {
         {/* Timer bar */}
         <div className="mb-3 h-2 overflow-hidden rounded-full bg-primary/15">
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-primary to-amber-400"
+            className="h-full rounded-full bg-primary"
             animate={{ width: `${timerPercent}%` }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           />
@@ -367,7 +367,7 @@ export default function Quiz() {
                       <button
                         onClick={() => setHintsUsed((h) => Math.min(h + 1, 3))}
                         disabled={locked || hintsUsed >= 3}
-                        className="cursor-pointer rounded-lg bg-amber-500/20 px-3 py-2 text-sm font-semibold text-amber-600 transition-all hover:bg-amber-500/30 disabled:opacity-30 dark:text-amber-400"
+                        className="cursor-pointer rounded-lg bg-highlight/20 px-3 py-2 text-sm font-semibold text-highlight transition-all hover:bg-highlight/30 disabled:opacity-30"
                       >
                         {hintsUsed >= 3 ? 'Revealed' : `Hint 💡`}
                       </button>

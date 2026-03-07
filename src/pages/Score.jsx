@@ -3,14 +3,14 @@ import { useParams, useLocation, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const TITLES = [
-  { min: 100, title: 'Vocabulary Master', emoji: '🏆', color: 'from-amber-400 to-yellow-500' },
-  { min: 90, title: 'Word Wizard', emoji: '🧙', color: 'from-violet-400 to-purple-500' },
-  { min: 80, title: 'Language Star', emoji: '🌟', color: 'from-cyan-400 to-blue-500' },
-  { min: 70, title: 'Quick Learner', emoji: '🚀', color: 'from-emerald-400 to-green-500' },
-  { min: 60, title: 'Word Explorer', emoji: '🧭', color: 'from-teal-400 to-emerald-500' },
-  { min: 40, title: 'Rising Scholar', emoji: '📖', color: 'from-orange-400 to-amber-500' },
-  { min: 20, title: 'Word Apprentice', emoji: '✏️', color: 'from-rose-400 to-pink-500' },
-  { min: 0, title: 'Word Rookie', emoji: '🌱', color: 'from-gray-400 to-gray-500' },
+  { min: 100, title: 'Vocabulary Master', emoji: '🏆', color: 'text-[#c97b63]' },
+  { min: 90, title: 'Word Wizard', emoji: '🧙', color: 'text-[#8b7ea8]' },
+  { min: 80, title: 'Language Star', emoji: '🌟', color: 'text-[#6d9aaa]' },
+  { min: 70, title: 'Quick Learner', emoji: '🚀', color: 'text-[#81b29a]' },
+  { min: 60, title: 'Word Explorer', emoji: '🧭', color: 'text-[#5c6078]' },
+  { min: 40, title: 'Rising Scholar', emoji: '📖', color: 'text-[#b8876e]' },
+  { min: 20, title: 'Word Apprentice', emoji: '✏️', color: 'text-[#a07e7e]' },
+  { min: 0, title: 'Word Rookie', emoji: '🌱', color: 'text-[#9a8c76]' },
 ]
 
 function getTitle(percent) {
@@ -132,9 +132,7 @@ export default function Score() {
             className="mb-6 text-center"
           >
             <span className="text-6xl">{title.emoji}</span>
-            <h2
-              className={`mt-2 bg-gradient-to-r ${title.color} bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl`}
-            >
+            <h2 className={`mt-2 text-2xl font-extrabold sm:text-3xl ${title.color}`}>
               {title.title}
             </h2>
           </motion.div>
@@ -146,9 +144,7 @@ export default function Score() {
             transition={{ delay: 0.3 }}
             className="mb-6 text-center"
           >
-            <span className="bg-gradient-to-r from-amber-500 to-amber-400 bg-clip-text text-6xl font-black text-transparent sm:text-7xl">
-              {totalScore}
-            </span>
+            <span className="text-6xl font-black text-primary-light sm:text-7xl">{totalScore}</span>
             <span className="ml-2 text-xl text-foreground/40">pts</span>
             <p className="mt-1 text-sm text-foreground/40">{topic.name}</p>
           </motion.div>
@@ -167,7 +163,7 @@ export default function Score() {
               <div className="mt-1 text-xs text-foreground/50">Correct</div>
             </div>
             <div className="rounded-xl bg-muted p-4 text-center ring-1 ring-border">
-              <div className="text-2xl font-extrabold text-amber-500">{hintsTotal}</div>
+              <div className="text-2xl font-extrabold text-highlight">{hintsTotal}</div>
               <div className="mt-1 text-xs text-foreground/50">Hints Used</div>
             </div>
             <div className="rounded-xl bg-muted p-4 text-center ring-1 ring-border">
@@ -208,14 +204,14 @@ export default function Score() {
                       <span className="text-xs text-danger/70 line-through">{r.answer}</span>
                     )}
                     {r.hintsUsed > 0 && (
-                      <span className="text-xs text-amber-500">
+                      <span className="text-xs text-highlight">
                         {r.hintsUsed} hint{r.hintsUsed > 1 ? 's' : ''}
                       </span>
                     )}
                     <span
                       className={`min-w-[3rem] text-right text-sm font-bold ${
                         r.score > 100
-                          ? 'text-amber-500'
+                          ? 'text-highlight'
                           : r.score > 0
                             ? 'text-success'
                             : 'text-foreground/30'
@@ -245,7 +241,7 @@ export default function Score() {
             onClick={handleDownload}
             disabled={downloading}
             aria-label="Save result as image"
-            className="cursor-pointer rounded-xl bg-amber-500 px-6 py-3 font-bold text-white shadow-lg shadow-amber-500/20 transition-all hover:brightness-110 disabled:opacity-50"
+            className="cursor-pointer rounded-xl bg-highlight px-6 py-3 font-bold text-white shadow-lg shadow-highlight/20 transition-all hover:brightness-110 disabled:opacity-50"
           >
             {downloading ? 'Saving...' : 'Save Result 📸'}
           </button>

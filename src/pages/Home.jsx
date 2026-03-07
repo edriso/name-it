@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getTopics } from '../topics'
 
-// Stable color per topic — hash slug to pick a color that never changes with filtering
+// Flat, muted 2D card colors — earthy and modern
 const CARD_COLORS = [
-  'from-amber-600 to-amber-700',
-  'from-emerald-600 to-emerald-700',
-  'from-violet-600 to-violet-700',
-  'from-rose-600 to-rose-700',
-  'from-cyan-600 to-cyan-700',
-  'from-fuchsia-600 to-fuchsia-700',
-  'from-sky-600 to-sky-700',
-  'from-lime-600 to-lime-700',
-  'from-indigo-600 to-indigo-700',
+  'bg-[#c97b63]', // soft terracotta
+  'bg-[#81b29a]', // sage
+  'bg-[#5c6078]', // muted navy
+  'bg-[#b8876e]', // sandy clay
+  'bg-[#6d9aaa]', // muted teal
+  'bg-[#8a9a6f]', // olive
+  'bg-[#8b7ea8]', // dusty lavender
+  'bg-[#9a8c76]', // taupe
+  'bg-[#a07e7e]', // dusty rose
 ]
 
 // Shuffle colors once per page load so each visit feels fresh
@@ -52,7 +52,7 @@ export default function Home() {
             transition={{ delay: 0.1 }}
             className="mb-3 text-5xl font-extrabold tracking-tight sm:text-7xl"
           >
-            <span className="bg-gradient-to-r from-amber-700 via-amber-500 to-amber-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary via-primary-light to-primary bg-clip-text text-transparent">
               NameIt!
             </span>
           </motion.h1>
@@ -104,7 +104,7 @@ export default function Home() {
                   className="group relative block overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl sm:p-6"
                 >
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${topicColorMap[topic.slug]} opacity-90 transition-opacity group-hover:opacity-100`}
+                    className={`absolute inset-0 ${topicColorMap[topic.slug]} transition-opacity group-hover:brightness-110`}
                   />
                   <div className="relative z-10">
                     <h2 className="text-xl font-extrabold text-white sm:text-2xl">{topic.name}</h2>

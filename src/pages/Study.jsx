@@ -291,7 +291,7 @@ export default function Study() {
               <div className="w-full max-w-md">
                 <div className="h-2 overflow-hidden rounded-full bg-muted">
                   <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-primary to-amber-500"
+                    className="h-full rounded-full bg-primary"
                     initial={{ width: '0%' }}
                     animate={{ width: `${progress}%` }}
                     transition={{ duration: 0.5 }}
