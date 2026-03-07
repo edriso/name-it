@@ -214,12 +214,8 @@ export default function Quiz() {
 
   const hint = getHintText(currentDisplay, hintsUsed)
   const timerPercent = (timeLeft / questionTime) * 100
-  const timerColor =
-    timeLeft > questionTime * 0.66
-      ? 'bg-success'
-      : timeLeft > questionTime * 0.33
-        ? 'bg-amber-500'
-        : 'bg-danger'
+  const timerEmoji =
+    timeLeft > questionTime * 0.66 ? '😊' : timeLeft > questionTime * 0.33 ? '🤔' : '😬'
 
   return (
     <motion.div
@@ -256,19 +252,18 @@ export default function Quiz() {
             </span>
           </div>
           <h2 className="text-lg font-bold text-foreground">{topic.name}</h2>
-          <span
-            className={`text-2xl font-extrabold tabular-nums ${timeLeft <= questionTime * 0.33 ? 'text-danger' : 'text-foreground'}`}
-          >
-            {timeLeft}s
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-lg">{timerEmoji}</span>
+            <span className="text-lg font-bold tabular-nums text-foreground/60">{timeLeft}s</span>
+          </div>
         </div>
 
         {/* Timer bar */}
-        <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-muted">
+        <div className="mb-3 h-2 overflow-hidden rounded-full bg-primary/15">
           <motion.div
-            className={`h-full rounded-full ${timerColor}`}
+            className="h-full rounded-full bg-gradient-to-r from-primary to-amber-400"
             animate={{ width: `${timerPercent}%` }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
           />
         </div>
 
