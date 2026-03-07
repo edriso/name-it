@@ -7,13 +7,17 @@ import ZoomableImage from '../components/ZoomableImage'
 const STUDY_TIME = 30
 const TIMER_OPTIONS = [15, 20, 30, 60]
 
+const WORD_THRESHOLDS = [8, 12, 16]
+
 function getWordCountOptions(total) {
-  const options = []
-  if (total > 8) options.push(8)
-  if (total > 12) options.push(12)
-  if (total >= 16) options.push(16)
+  const options = WORD_THRESHOLDS.filter((t) => t < total)
   options.push(total)
   return options
+}
+
+function getDefaultWordCount(total) {
+  if (total <= 12) return total
+  return 12
 }
 
 export default function Study() {
@@ -29,7 +33,7 @@ export default function Study() {
     () => (topic ? getWordCountOptions(topic.words.length) : []),
     [topic],
   )
-  const [wordCount, setWordCount] = useState(() => topic?.words.length ?? 0)
+  const [wordCount, setWordCount] = useState(() => getDefaultWordCount(topic?.words.length ?? 0))
 
   const goToQuiz = useCallback(() => {
     navigate(`/topics/${slug}/quiz`, {
