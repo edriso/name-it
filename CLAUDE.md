@@ -16,12 +16,12 @@ npm run format:check # Prettier — check formatting
 src/
   App.jsx              # Routes (react-router-dom v7)
   main.jsx             # Entry point
-  topics.js            # Auto-discovers topics via import.meta.glob
+  topics.js            # Auto-discovers topics via import.meta.glob (image + definition types)
   index.css            # Tailwind CSS 4 with @theme tokens
   pages/
-    Home.jsx           # Topic selection grid
-    Study.jsx          # Study page with image, word list, quiz settings
-    Quiz.jsx           # Quiz page with timer, hints, skip
+    Home.jsx           # Topic grid with All/Pictures/Definitions filter
+    Study.jsx          # Study page (image or definition cards), quiz settings
+    Quiz.jsx           # Quiz page with timer, hints, skip (image or definition mode)
     Score.jsx          # Results with breakdown, download, title badges
     NotFound.jsx       # 404 page
   components/

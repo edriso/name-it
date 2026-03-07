@@ -11,8 +11,10 @@ A fun, interactive vocabulary quiz game for young students, inspired by the Oxfo
 
 ## Features
 
+- **Two Quiz Types** — Image-based (name the numbered item) and definition-based (guess the word from its meaning)
+- **Topic Filter** — Filter topics by type (All / Pictures / Definitions) on the home page
 - **Word Count Selector** — Choose how many words to quiz (8, 12, 16, or all)
-- **Quiz Settings** — Customizable timer (10s–30s) and random/in-order mode
+- **Quiz Settings** — Customizable timer (15s–60s) and random/in-order mode
 - **Multi-Answer Support** — Words with alternative names (e.g., "cement-mixer" / "concrete mixer") all count as correct
 - **Hint System** — Up to 3 hints per question, with progressive letter reveals
 - **Score Titles** — Earn titles from "Word Rookie" to "Vocabulary Master" based on performance
