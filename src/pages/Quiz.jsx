@@ -137,8 +137,19 @@ export default function Quiz() {
       <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="mb-3 flex items-center justify-between">
-          <div className="text-sm font-medium text-gray-400">
-            {currentIndex + 1} / {totalQuestions}
+          <div className="flex items-center gap-3">
+            <Link
+              to="/"
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-light/60 text-gray-400 ring-1 ring-white/10 transition-colors hover:bg-surface-light hover:text-white"
+              title="Exit quiz"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+                <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+              </svg>
+            </Link>
+            <span className="text-sm font-medium text-gray-400">
+              {currentIndex + 1} / {totalQuestions}
+            </span>
           </div>
           <h2 className="text-lg font-bold text-white">{topic.name}</h2>
           <span

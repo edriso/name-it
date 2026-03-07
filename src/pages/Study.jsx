@@ -47,17 +47,28 @@ export default function Study() {
       className="min-h-screen px-4 py-6 sm:py-10"
     >
       <div className="mx-auto max-w-4xl">
-        <div className="mb-6 text-center">
-          <motion.h1
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="text-3xl font-extrabold sm:text-4xl"
+        <div className="mb-6">
+          <Link
+            to="/"
+            className="mb-4 inline-flex items-center gap-2 rounded-lg bg-surface-light/60 px-3 py-1.5 text-sm text-gray-400 ring-1 ring-white/10 transition-colors hover:bg-surface-light hover:text-white"
           >
-            Study Time! 👀
-          </motion.h1>
-          <p className="mt-2 text-gray-400">
-            Memorize the words — the quiz is coming!
-          </p>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+              <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+            </svg>
+            Back
+          </Link>
+          <div className="text-center">
+            <motion.h1
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="text-3xl font-extrabold sm:text-4xl"
+            >
+              Study Time! 👀
+            </motion.h1>
+            <p className="mt-2 text-gray-400">
+              Memorize the words — the quiz is coming!
+            </p>
+          </div>
         </div>
 
         <motion.div
