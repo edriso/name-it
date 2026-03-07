@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { getTopic } from '../topics'
@@ -6,6 +6,15 @@ import ZoomableImage from '../components/ZoomableImage'
 
 const STUDY_TIME = 30
 const TIMER_OPTIONS = [10, 15, 20, 30]
+
+function getWordCountOptions(total) {
+  const options = []
+  if (total > 8) options.push(8)
+  if (total > 12) options.push(12)
+  if (total >= 16) options.push(16)
+  options.push(total)
+  return options
+}
 
 export default function Study() {
   const { slug } = useParams()
@@ -16,11 +25,17 @@ export default function Study() {
   const [timer, setTimer] = useState(15)
   const [shuffle, setShuffle] = useState(true)
 
+  const wordCountOptions = useMemo(
+    () => (topic ? getWordCountOptions(topic.words.length) : []),
+    [topic],
+  )
+  const [wordCount, setWordCount] = useState(() => topic?.words.length ?? 0)
+
   const goToQuiz = useCallback(() => {
     navigate(`/topics/${slug}/quiz`, {
-      state: { timer, shuffle },
+      state: { timer, shuffle, wordCount },
     })
-  }, [navigate, slug, timer, shuffle])
+  }, [navigate, slug, timer, shuffle, wordCount])
 
   useEffect(() => {
     if (!started) return
@@ -37,7 +52,9 @@ export default function Study() {
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <p className="text-2xl text-foreground/60">Topic not found</p>
-          <Link to="/" className="mt-4 inline-block text-primary underline">Go back</Link>
+          <Link to="/" className="mt-4 inline-block text-primary underline">
+            Go back
+          </Link>
         </div>
       </div>
     )
@@ -58,8 +75,17 @@ export default function Study() {
             to="/"
             className="mb-4 inline-flex items-center gap-2 rounded-lg bg-card px-3 py-1.5 text-sm text-foreground/50 ring-1 ring-border transition-colors hover:bg-card-hover hover:text-foreground"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
-              <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="h-4 w-4"
+            >
+              <path
+                fillRule="evenodd"
+                d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
+                clipRule="evenodd"
+              />
             </svg>
             Back
           </Link>
@@ -111,7 +137,9 @@ export default function Study() {
                 <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
                   {i + 1}
                 </span>
-                <span className="text-sm font-medium text-foreground/80">{word}</span>
+                <span className="text-sm font-medium text-foreground/80">
+                  {word}
+                </span>
               </motion.div>
             ))}
           </div>
@@ -127,15 +155,42 @@ export default function Study() {
           <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-foreground/40">
             Quiz Settings
           </h3>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-4">
+            {/* Words */}
+            {wordCountOptions.length > 1 && (
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-medium text-foreground/60">
+                  Words
+                </span>
+                <div className="flex gap-1.5">
+                  {wordCountOptions.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setWordCount(c)}
+                      className={`cursor-pointer rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
+                        wordCount === c
+                          ? 'bg-primary text-white shadow-md shadow-primary/20'
+                          : 'bg-muted text-foreground/50 hover:bg-card-hover hover:text-foreground/70'
+                      }`}
+                    >
+                      {c === topic.words.length ? `All (${c})` : c}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Timer */}
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-foreground/60">Timer</span>
+              <span className="text-sm font-medium text-foreground/60">
+                Timer
+              </span>
               <div className="flex gap-1.5">
                 {TIMER_OPTIONS.map((t) => (
                   <button
                     key={t}
                     onClick={() => setTimer(t)}
-                    className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
+                    className={`cursor-pointer rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
                       timer === t
                         ? 'bg-primary text-white shadow-md shadow-primary/20'
                         : 'bg-muted text-foreground/50 hover:bg-card-hover hover:text-foreground/70'
@@ -147,12 +202,15 @@ export default function Study() {
               </div>
             </div>
 
+            {/* Order */}
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-foreground/60">Order</span>
+              <span className="text-sm font-medium text-foreground/60">
+                Order
+              </span>
               <div className="flex gap-1.5">
                 <button
                   onClick={() => setShuffle(true)}
-                  className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
+                  className={`cursor-pointer rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
                     shuffle
                       ? 'bg-primary text-white shadow-md shadow-primary/20'
                       : 'bg-muted text-foreground/50 hover:bg-card-hover hover:text-foreground/70'
@@ -162,7 +220,7 @@ export default function Study() {
                 </button>
                 <button
                   onClick={() => setShuffle(false)}
-                  className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
+                  className={`cursor-pointer rounded-lg px-3 py-1.5 text-sm font-semibold transition-all ${
                     !shuffle
                       ? 'bg-primary text-white shadow-md shadow-primary/20'
                       : 'bg-muted text-foreground/50 hover:bg-card-hover hover:text-foreground/70'
@@ -181,13 +239,13 @@ export default function Study() {
             <div className="flex gap-3">
               <button
                 onClick={() => setStarted(true)}
-                className="rounded-xl bg-card px-6 py-3 font-semibold text-foreground/60 ring-1 ring-border transition-all hover:bg-card-hover"
+                className="cursor-pointer rounded-xl bg-card px-6 py-3 font-semibold text-foreground/60 ring-1 ring-border transition-all hover:bg-card-hover"
               >
                 Start Timer ({STUDY_TIME}s)
               </button>
               <button
                 onClick={goToQuiz}
-                className="rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:brightness-110"
+                className="cursor-pointer rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:brightness-110"
               >
                 I'm Ready! 🚀
               </button>
@@ -209,7 +267,7 @@ export default function Study() {
               </div>
               <button
                 onClick={goToQuiz}
-                className="rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:brightness-110"
+                className="cursor-pointer rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 hover:brightness-110"
               >
                 I'm Ready! 🚀
               </button>

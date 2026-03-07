@@ -8,15 +8,6 @@ const DEFAULT_TIME = 15
 const CORRECT_DELAY = 800
 const WRONG_DELAY = 1800
 
-function shuffleArray(arr) {
-  const shuffled = arr.map((word, originalIndex) => ({ word, originalIndex }))
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
-}
-
 function calculateScore(hintsUsed, timeLeft, questionTime) {
   if (hintsUsed >= 3) return 0
   if (hintsUsed === 2) return 40
@@ -44,12 +35,20 @@ export default function Quiz() {
 
   const questionTime = state?.timer ?? DEFAULT_TIME
   const shouldShuffle = state?.shuffle ?? true
+  const wordCount = state?.wordCount ?? topic?.words.length ?? 0
 
   const questions = useMemo(() => {
     if (!topic) return []
-    const items = topic.words.map((word, i) => ({ word, originalIndex: i }))
-    return shouldShuffle ? shuffleArray(topic.words) : items
-  }, [topic, shouldShuffle])
+    const all = topic.words.map((word, i) => ({ word, originalIndex: i }))
+    const sliced = wordCount < all.length ? all.slice(0, wordCount) : all
+    if (!shouldShuffle) return sliced
+    const shuffled = [...sliced]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    return shuffled
+  }, [topic, shouldShuffle, wordCount])
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answer, setAnswer] = useState('')
@@ -70,7 +69,7 @@ export default function Quiz() {
 
       if (currentIndex + 1 >= totalQuestions) {
         navigate(`/topics/${slug}/score`, {
-          state: { results: newResults, topic, settings: { timer: questionTime, shuffle: shouldShuffle } },
+          state: { results: newResults, topic, settings: { timer: questionTime, shuffle: shouldShuffle, wordCount } },
         })
       } else {
         setCurrentIndex((i) => i + 1)
