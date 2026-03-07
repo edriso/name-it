@@ -9,6 +9,17 @@ A fun, interactive vocabulary quiz game for young students, inspired by the Oxfo
 3. **Quiz** — The labels disappear. Type the correct word for each numbered item.
 4. **Score** — See how you did, with points for speed and accuracy.
 
+## Features
+
+- **Word Count Selector** — Choose how many words to quiz (8, 12, 16, or all)
+- **Quiz Settings** — Customizable timer (10s–30s) and random/in-order mode
+- **Hint System** — Up to 3 hints per question, with progressive letter reveals
+- **Score Titles** — Earn titles from "Word Rookie" to "Vocabulary Master" based on performance
+- **Screenshot Download** — Save your score card as a PNG image
+- **Keyboard Shortcuts** — Quick keys for hints, skip, and navigation
+- **Fullscreen Image Viewer** — Pan and zoom the study image for detail
+- **Animated Transitions** — Smooth page transitions and celebration effects
+
 ## Adding New Topics
 
 Create a folder in `src/assets/topics/` with two files:
@@ -16,8 +27,8 @@ Create a folder in `src/assets/topics/` with two files:
 ```
 src/assets/topics/
   your-topic/
-    index.js      ← topic definition
-    cover.jpeg    ← illustrated image with numbered items
+    index.js      <- topic definition
+    cover.jpeg    <- illustrated image with numbered items
 ```
 
 The `index.js` file:
@@ -40,14 +51,18 @@ That's it — the app auto-discovers new topics. No other code changes needed.
 
 ## Tech Stack
 
-- React 19 + Vite
+- React 19 + Vite 7
 - Tailwind CSS 4
-- React Router
+- React Router v7
 - Framer Motion
 
 ## Development
 
 ```bash
 npm install
-npm run dev
+npm run dev          # Start dev server
+npm run build        # Production build
+npm run lint         # ESLint
+npm run format       # Prettier — format all files
+npm run format:check # Check formatting
 ```
