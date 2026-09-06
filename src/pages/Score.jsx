@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -13,6 +13,14 @@ const TITLES = [
   { min: 0, title: 'Word Rookie', emoji: '🌱', color: 'text-[#9a8c76]' },
 ]
 
+// Stable decorative trajectories keep celebration renders deterministic.
+const particles = Array.from({ length: 20 }, (_, i) => ({
+  x: 40 + ((i * 13) % 21),
+  rotate: i % 2 === 0 ? 360 : -360,
+  duration: 2 + ((i * 7) % 20) / 10,
+  delay: ((i * 11) % 15) / 10,
+}))
+
 function getTitle(percent) {
   return TITLES.find((t) => percent >= t.min) || TITLES.at(-1)
 }
@@ -25,16 +33,6 @@ export default function Score() {
   const [downloading, setDownloading] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
 
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 20 }, () => ({
-        x: 50 + (Math.random() - 0.5) * 20,
-        rotate: Math.random() > 0.5 ? 360 : -360,
-        duration: 2 + Math.random() * 2,
-        delay: Math.random() * 1.5,
-      })),
-    [],
-  )
 
   const handleTryAgain = useCallback(() => {
     if (state?.settings) navigate(`/topics/${type}/${slug}/quiz`, { state: state.settings })
